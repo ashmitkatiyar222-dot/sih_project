@@ -1,0 +1,90 @@
+export const PRESETS = {
+  aravalli: {
+    lat: 27.0238,
+    lng: 76.3557,
+    footprint: 45,
+    buffer: 10,
+    category: "cat_a_mining",
+    title: "Aravalli Mining (Eco-Sensitive Buffer)",
+    verdict: "CONDITIONAL CLEARANCE WITH EMP",
+    verdictDesc: "Buffer overlaps with 2.4km Eco-Sensitive Zone boundary. Statutory clearance granted subject to Wildlife Management Plan and Zero Liquid Discharge (ZLD) implementation.",
+    riskScore: 62,
+    sanctuary: "Sariska Tiger Reserve: 4.2 km",
+    hydro: "Aquifer Recharge Area: High Runoff Risk",
+    aqi: "PM2.5: 142 µg/m³ (Non-Attainment Zone)",
+    radarData: [75, 65, 80, 50, 40],
+    badgeColor: "amber"
+  },
+  western_ghats: {
+    lat: 11.9139,
+    lng: 75.9863,
+    footprint: 120,
+    buffer: 15,
+    category: "cat_b1_hydro",
+    title: "Western Ghats Hydro Dam (Rainforest Basin)",
+    verdict: "CRITICAL SCRUTINY / NBWL REVIEW",
+    verdictDesc: "Located in UNESCO World Heritage Biodiversity Hotspot. Project footprint directly touches high-density rainforest canopy. Public hearing & central MoEFCC clearance mandatory.",
+    riskScore: 84,
+    sanctuary: "Wayanad Wildlife Sanctuary: 1.1 km",
+    hydro: "Kabini River Perennial Basin (Immediate Intersect)",
+    aqi: "PM2.5: 28 µg/m³ (Pristine Forest Baseline)",
+    radarData: [95, 90, 85, 20, 90],
+    badgeColor: "red"
+  },
+  yamuna_corridor: {
+    lat: 28.3842,
+    lng: 77.3182,
+    footprint: 60,
+    buffer: 8,
+    category: "cat_a_chem",
+    title: "Yamuna Industrial Corridor (Airshed Check)",
+    verdict: "APPROVED WITH AIR QUALITY STIPULATIONS",
+    verdictDesc: "Located in designated industrial zone. Strict Continuous Emission Monitoring System (CEMS) and 99.5% ESP particulate scrubbing mandated due to NCR airshed limits.",
+    riskScore: 58,
+    sanctuary: "Okhla Bird Sanctuary: 9.8 km",
+    hydro: "Yamuna Floodplain 500m Buffer Adherence",
+    aqi: "PM2.5: 210 µg/m³ (Severe Airshed Baseline)",
+    radarData: [45, 60, 95, 80, 50],
+    badgeColor: "orange"
+  },
+  bhadla_solar: {
+    lat: 27.5386,
+    lng: 71.9167,
+    footprint: 200,
+    buffer: 5,
+    category: "cat_b2_solar",
+    title: "Bhadla 500MW Solar (Cat B2 Fast-Track)",
+    verdict: "EXPEDITED GREEN CHANNEL CLEARANCE",
+    verdictDesc: "Low ecological sensitivity arid zone. Categorized as Category B2 (Green Category). Exempt from public hearing under MoEFCC solar standard operating procedures.",
+    riskScore: 18,
+    sanctuary: "Desert National Park: 42 km (Clear)",
+    hydro: "Arid Non-Basin Zone: Low Impact",
+    aqi: "PM2.5: 64 µg/m³ (Desert Dust Baseline)",
+    radarData: [15, 20, 25, 10, 15],
+    badgeColor: "emerald"
+  },
+  sundarbans: {
+    lat: 21.9497,
+    lng: 88.9004,
+    footprint: 35,
+    buffer: 12,
+    category: "cat_b1_infra",
+    title: "Sundarbans Port (CRZ-I Coastal Zone)",
+    verdict: "CRZ-I CLEARANCE & MANGROVE AFFORESTATION",
+    verdictDesc: "Coastal Regulation Zone I (Ecologically Sensitive). Mandatory 1:3 compensatory mangrove replantation and marine biodiversity conservation plan required.",
+    riskScore: 78,
+    sanctuary: "Sundarbans Biosphere Reserve: 2.8 km",
+    hydro: "Tidal Estuarine Ingress & Salinity Impact",
+    aqi: "PM2.5: 35 µg/m³ (Coastal Baseline)",
+    radarData: [90, 85, 40, 75, 80],
+    badgeColor: "purple"
+  }
+};
+
+export const CATEGORIES = [
+  { value: "cat_a_mining", label: "Category A: Mining & Mineral Extraction (>50 Ha)" },
+  { value: "cat_a_chem", label: "Category A: Synthetic Organic Chemicals & Heavy Metallurgy" },
+  { value: "cat_b1_hydro", label: "Category B1: Hydroelectric & River Valley Dam" },
+  { value: "cat_b1_infra", label: "Category B1: Highway Corridors & Logistics Parks" },
+  { value: "cat_b2_solar", label: "Category B2: Solar PV & Renewable Energy (Expedited)" }
+];

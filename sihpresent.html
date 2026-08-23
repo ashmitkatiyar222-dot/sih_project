@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecoryx — Automated Geospatial Environmental Impact Assessment (EIA) Platform</title>
+
+    <meta name="description"
+        content="Ecoryx bridges civil infrastructure engineering with automated environmental compliance. Sub-second PostGIS spatial querying and Gemini AI statutory clearance.">
+    <meta name="theme-color" content="#0A2619">
+
+    <!-- Google Fonts: Plus Jakarta Sans + Inter + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet CSS & JS for Geospatial Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Chart.js CDN for Risk Radar & Telemetry Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- jsPDF & canvas-confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        eco: {
+                            deep: '#0A2619',      // Deep forest canopy
+                            pine: '#13442C',      // Pine green
+                            moss: '#1E6F4A',      // Primary vibrant forest
+                            leaf: '#2D8A5E',      // Fresh foliage
+                            sage: '#52A87D',      // Muted sage
+                            mint: '#7AD3A2',      // Crisp mint accent
+                            lightBg: '#F5F8F6',   // Clean warm linen / topo canvas
+                            cardBg: '#FFFFFF',    // Crisp solid white card
+                            border: '#D8E5DD',    // Crisp subtle green-gray border
+                            darkBorder: '#1A4A32' // Deep green solid border
+                        },
+                        infra: {
+                            slate: '#0F172A',     // Deep engineering slate
+                            steel: '#1E293B',     // Steel beam charcoal
+                            iron: '#334155',      // Medium infrastructure gray
+                            terracotta: '#C85A32',// Earth / clay footprint
+                            terracottaDark: '#A84320',
+                            sand: '#EAE1D0',      // Topo contour sand
+                            concrete: '#E2E8F0',  // Light concrete border
+                            amber: '#D97706'      // Caution / notice amber
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    },
+                    boxShadow: {
+                        'eco-sm': '0 1px 2px 0 rgba(10, 38, 25, 0.05)',
+                        'eco-md': '0 4px 6px -1px rgba(10, 38, 25, 0.08), 0 2px 4px -2px rgba(10, 38, 25, 0.05)',
+                        'eco-lg': '0 10px 15px -3px rgba(10, 38, 25, 0.08), 0 4px 6px -4px rgba(10, 38, 25, 0.04)',
+                        'eco-xl': '0 20px 25px -5px rgba(10, 38, 25, 0.1), 0 8px 10px -6px rgba(10, 38, 25, 0.04)',
+                        'infra-md': '0 4px 12px rgba(15, 23, 42, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Topographic Contour Pattern (Crisp and Non-glitchy) */
+        .topo-bg {
+            background-color: #F5F8F6;
+            background-image:
+                radial-gradient(#1E6F4A 0.75px, transparent 0.75px),
+                linear-gradient(to right, rgba(30, 111, 74, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 111, 74, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px, 48px 48px, 48px 48px;
+        }
+
+        .dark-forest-bg {
+            background-color: #0A2619;
+            background-image:
+                radial-gradient(rgba(122, 211, 162, 0.15) 1px, transparent 1px),
+                linear-gradient(to right, rgba(30, 111, 74, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 111, 74, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px, 64px 64px, 64px 64px;
+        }
+
+        /* Solid Enterprise Cards */
+        .solid-eco-card {
+            background: #FFFFFF;
+            border: 1px solid #D8E5DD;
+            box-shadow: 0 2px 4px rgba(10, 38, 25, 0.04), 0 8px 24px rgba(10, 38, 25, 0.04);
+            border-radius: 1rem;
+        }
+
+        .solid-eco-card-interactive {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .solid-eco-card-interactive:hover {
+            border-color: #1E6F4A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(10, 38, 25, 0.08);
+        }
+
+        /* Rotary Dial / Scroller Comparison Widget */
+        .rotary-switch-box {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: #FFFFFF;
+            border: 1px solid #D8E5DD;
+            border-radius: 9999px;
+            box-shadow: 0 4px 16px rgba(10, 38, 25, 0.06);
+            user-select: none;
+        }
+
+        .rotary-socket {
+            position: relative;
+            width: 78px;
+            height: 78px;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 30%, #1E293B 0%, #0F172A 100%);
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.7), 0 3px 10px rgba(10, 38, 25, 0.15);
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .rotary-socket:active {
+            transform: scale(0.96);
+        }
+
+        .rotary-knob {
+            position: relative;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #334155, #1E293B);
+            border: 2px solid #475569;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.2);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rotary-pointer {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 12px;
+            background: #7AD3A2;
+            border-radius: 2px;
+            box-shadow: 0 0 6px #7AD3A2;
+        }
+
+        .rotary-center-cap {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #0F172A;
+            border: 1px solid #475569;
+        }
+
+        .rotary-knob.state-before { transform: rotate(-30deg); }
+        .rotary-knob.state-after { transform: rotate(30deg); }
+
+        .switch-tab-btn {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .switch-tab-btn.active-before {
+            background: #A84320;
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(168, 67, 32, 0.3);
+        }
+
+        .switch-tab-btn.active-after {
+            background: #13442C;
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(19, 68, 44, 0.3);
+        }
+
+        .switch-tab-btn.inactive {
+            color: #64748B;
+            background: transparent;
+        }
+        .switch-tab-btn.inactive:hover {
+            color: #0F172A;
+            background: #F1F5F2;
+        }
+
+        /* Leaflet custom overrides */
+        .leaflet-container {
+            font-family: 'Inter', sans-serif !important;
+            background-color: #E6EFEA !important;
+            border-radius: 0.75rem;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #0A2619 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #2D8A5E !important;
+            border-radius: 0.5rem !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .leaflet-popup-tip {
+            background: #0A2619 !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F8F6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1E6F4A;
+        }
+    </style>
+</head>
+
+<body class="bg-eco-lightBg text-infra-slate font-sans antialiased selection:bg-eco-pine selection:text-white">
+
+    <!-- 1. TOP STATUTORY & HACKATHON TICKER -->
+    <div class="bg-eco-deep text-white border-b border-eco-darkBorder px-4 py-2 text-xs font-mono">
+        <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-eco-pine text-eco-mint border border-eco-sage/30 font-bold uppercase text-[10px]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-eco-mint animate-pulse"></span>
+                    SIH 2026 Innovation
+                </span>
+                <span class="text-zinc-300 hidden sm:inline">
+                    Automated Pre-Feasibility EIA Screening for Ministry of Environment, Forest and Climate Change (MoEFCC)
+                </span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px] text-zinc-400">
+                <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-eco-mint"></i> PostGIS 3.4 Spatial Joins</span>
+                <span class="hidden md:flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-eco-mint"></i> Gemini 2.0 Statutory Rulebook</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN CLEAN NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-eco-border shadow-eco-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+            <!-- Logo with Eco + Infra Mark -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-lg bg-eco-deep flex items-center justify-center text-eco-mint font-bold shadow-eco-sm group-hover:bg-eco-pine transition-colors">
+                    <i data-lucide="trees" class="w-5 h-5"></i>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-display font-extrabold text-xl tracking-tight text-eco-deep">Ecoryx</span>
+                        <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-eco-lightBg text-eco-moss border border-eco-border">
+                            GIS-EIA
+                        </span>
+                    </div>
+                    <span class="text-[9px] font-mono text-zinc-500 tracking-wider -mt-0.5">GEOSPATIAL INFRASTRUCTURE SCREENING</span>
+                </div>
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-600">
+                <a href="#simulator" class="hover:text-eco-moss text-eco-deep transition-colors flex items-center gap-1.5">
+                    <i data-lucide="compass" class="w-4 h-4 text-eco-moss"></i>
+                    GIS Simulator
+                </a>
+                <a href="#comparison" class="hover:text-eco-moss transition-colors">Bureaucracy vs Ecoryx</a>
+                <a href="#architecture" class="hover:text-eco-moss transition-colors">Tech Architecture</a>
+                <a href="#api" class="hover:text-eco-moss transition-colors">API Playground</a>
+                <a href="#roi-calc" class="hover:text-eco-moss transition-colors">Savings Calculator</a>
+            </div>
+
+            <!-- Header Action Button -->
+            <div class="flex items-center gap-3">
+                <button onclick="scrollToSimulator()"
+                    class="px-4 py-2 rounded-lg bg-eco-pine hover:bg-eco-deep text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-eco-sm active:scale-95">
+                    <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                    <span>Run Screening Audit</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 1: HERO SECTION -->
+        <!-- ========================================================================= -->
+        <section class="topo-bg py-16 sm:py-24 border-b border-eco-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                    <!-- Left Hero Content (7 Cols) -->
+                    <div class="lg:col-span-7 space-y-6">
+
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white border border-eco-border text-xs font-mono text-eco-moss font-bold shadow-eco-sm">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-infra-terracotta"></i>
+                            Programmatic Environmental Screening Platform
+                        </div>
+
+                        <h1 class="text-4xl sm:text-6xl font-display font-extrabold text-eco-deep tracking-tight leading-[1.1]">
+                            Drop project coordinates. <br />
+                            <span class="text-eco-moss">Instant statutory environmental clearance.</span>
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-zinc-600 leading-relaxed max-w-2xl font-normal">
+                            Ecoryx bridges civil infrastructure projects with automated environmental compliance.
+                            It automatically queries live air quality, hydrology, forest cover, and PostGIS-indexed
+                            biodiversity occurrences across radial buffer zones—turning months of manual GIS polygon
+                            tracing into instant, audit-ready compliance.
+                        </p>
+
+                        <!-- Solid Action Buttons -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                            <button onclick="scrollToSimulator()"
+                                class="px-6 py-3.5 rounded-lg bg-eco-deep hover:bg-eco-pine text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-eco-sm active:scale-95">
+                                <i data-lucide="compass" class="w-4 h-4 text-eco-mint"></i>
+                                Launch Live GIS Screening Console
+                            </button>
+                            <a href="#comparison"
+                                class="px-6 py-3.5 rounded-lg bg-white hover:bg-zinc-50 text-eco-deep border border-eco-border font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-eco-sm">
+                                <i data-lucide="layers" class="w-4 h-4 text-zinc-500"></i>
+                                View Bureaucracy vs Ecoryx
+                            </a>
+                        </div>
+
+                        <!-- Highlights Banner -->
+                        <div class="pt-4 grid grid-cols-3 gap-3 border-t border-eco-border">
+                            <div>
+                                <div class="text-xl sm:text-2xl font-mono font-bold text-eco-deep">&lt; 0.4s</div>
+                                <div class="text-xs text-zinc-500 font-medium">PostGIS Spatial Joins</div>
+                            </div>
+                            <div>
+                                <div class="text-xl sm:text-2xl font-mono font-bold text-eco-moss">100%</div>
+                                <div class="text-xs text-zinc-500 font-medium">Zero Manual CAD Tracing</div>
+                            </div>
+                            <div>
+                                <div class="text-xl sm:text-2xl font-mono font-bold text-infra-terracotta">PDF & EMP</div>
+                                <div class="text-xs text-zinc-500 font-medium">Audit-Ready Deliverables</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Visual Infrastructure Blueprint Card (5 Cols) -->
+                    <div class="lg:col-span-5">
+                        <div class="solid-eco-card p-6 relative overflow-hidden">
+
+                            <!-- Blueprint Titlebar -->
+                            <div class="flex items-center justify-between pb-4 border-b border-eco-border mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-eco-moss"></span>
+                                    <span class="font-mono text-xs font-bold text-eco-deep">RADIAL BUFFER SYNTHESIS</span>
+                                </div>
+                                <span class="text-[11px] font-mono text-zinc-400">ST_Buffer(10km)</span>
+                            </div>
+
+                            <!-- Visual Diagram of Infra Zone & Eco Buffer -->
+                            <div class="bg-eco-lightBg rounded-xl p-5 border border-eco-border mb-4 relative">
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between text-xs font-mono">
+                                        <span class="flex items-center gap-1.5 text-eco-deep font-semibold">
+                                            <span class="w-2 h-2 rounded-full bg-infra-terracotta"></span> Project Footprint (45 Ha)
+                                        </span>
+                                        <span class="text-zinc-500">Core Industrial Zone</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs font-mono">
+                                        <span class="flex items-center gap-1.5 text-eco-deep font-semibold">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Airshed Buffer (5 km)
+                                        </span>
+                                        <span class="text-zinc-500">CPCB Dispersion Check</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs font-mono">
+                                        <span class="flex items-center gap-1.5 text-eco-deep font-semibold">
+                                            <span class="w-2 h-2 rounded-full bg-eco-moss"></span> Eco-Sensitive Buffer (10 km)
+                                        </span>
+                                        <span class="text-eco-moss font-bold">WPA 1972 Intersect</span>
+                                    </div>
+                                </div>
+
+                                <!-- Visual Concentric Graphic -->
+                                <div class="mt-4 pt-4 border-t border-eco-border flex items-center justify-center">
+                                    <div class="relative w-44 h-44 rounded-full border-2 border-dashed border-eco-moss/50 flex items-center justify-center bg-eco-moss/5">
+                                        <div class="w-28 h-28 rounded-full border-2 border-amber-400/60 flex items-center justify-center bg-amber-500/5">
+                                            <div class="w-14 h-14 rounded-full bg-infra-terracotta/20 border-2 border-infra-terracotta flex flex-col items-center justify-center text-center p-1">
+                                                <i data-lucide="factory" class="w-4 h-4 text-infra-terracotta"></i>
+                                                <span class="text-[8px] font-mono font-bold text-infra-terracotta">PROJECT</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-xs text-zinc-500 font-mono flex items-center justify-between">
+                                <span>Statutory Cross-Check:</span>
+                                <span class="text-eco-deep font-bold">MoEFCC EIA 2006 / 2020</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 2: LIVE GEOSPATIAL EIA SIMULATOR (CORE MODEL) -->
+        <!-- ========================================================================= -->
+        <section id="simulator" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-eco-lightBg border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase mb-3">
+                    <span class="w-2 h-2 rounded-full bg-eco-moss animate-pulse"></span>
+                    Interactive Geospatial Screening Engine
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-eco-deep tracking-tight mb-3">
+                    Live Pre-Feasibility EIA Simulator
+                </h2>
+                <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+                    Drop coordinates, set project footprint area and buffer envelopes, then execute an instant statutory audit with sub-second PostGIS joins and Gemini 2.0 AI analysis.
+                </p>
+            </div>
+
+            <!-- PRESET SCENARIOS BAR -->
+            <div class="mb-4 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider shrink-0 font-bold">Presets:</span>
+                <button onclick="loadPreset('aravalli')" class="preset-btn px-3.5 py-1.5 rounded-lg bg-white hover:bg-eco-lightBg border border-eco-border text-xs font-medium text-zinc-700 hover:text-eco-deep transition-all shrink-0 flex items-center gap-1.5 shadow-eco-sm">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Aravalli Mining (Eco-Sensitive Buffer)
+                </button>
+                <button onclick="loadPreset('western_ghats')" class="preset-btn px-3.5 py-1.5 rounded-lg bg-white hover:bg-eco-lightBg border border-eco-border text-xs font-medium text-zinc-700 hover:text-eco-deep transition-all shrink-0 flex items-center gap-1.5 shadow-eco-sm">
+                    <span class="w-2 h-2 rounded-full bg-red-500"></span> Western Ghats Hydro Dam (Rainforest Basin)
+                </button>
+                <button onclick="loadPreset('yamuna_corridor')" class="preset-btn px-3.5 py-1.5 rounded-lg bg-white hover:bg-eco-lightBg border border-eco-border text-xs font-medium text-zinc-700 hover:text-eco-deep transition-all shrink-0 flex items-center gap-1.5 shadow-eco-sm">
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span> Yamuna Industrial Corridor (Airshed Check)
+                </button>
+                <button onclick="loadPreset('bhadla_solar')" class="preset-btn px-3.5 py-1.5 rounded-lg bg-white hover:bg-eco-lightBg border border-eco-border text-xs font-medium text-zinc-700 hover:text-eco-deep transition-all shrink-0 flex items-center gap-1.5 shadow-eco-sm">
+                    <span class="w-2 h-2 rounded-full bg-eco-moss"></span> Bhadla 500MW Solar (Cat B2 Fast-Track)
+                </button>
+                <button onclick="loadPreset('sundarbans')" class="preset-btn px-3.5 py-1.5 rounded-lg bg-white hover:bg-eco-lightBg border border-eco-border text-xs font-medium text-zinc-700 hover:text-eco-deep transition-all shrink-0 flex items-center gap-1.5 shadow-eco-sm">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span> Sundarbans Port (CRZ-I Coastal Zone)
+                </button>
+            </div>
+
+            <!-- SIMULATOR WORKBENCH CONTAINER -->
+            <div class="solid-eco-card overflow-hidden shadow-eco-md">
+                
+                <!-- Terminal Titlebar -->
+                <div class="bg-eco-deep text-white px-6 py-3 flex items-center justify-between border-b border-eco-darkBorder">
+                    <div class="flex items-center gap-2 font-mono text-xs font-medium">
+                        <i data-lucide="terminal" class="w-4 h-4 text-eco-mint"></i>
+                        <span>ecoryx-geospatial-daemon // v2.4.1-rc</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs font-mono">
+                        <span class="text-zinc-400 hidden sm:inline">Engine: PostGIS 3.4 + Gemini 2.0</span>
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-eco-pine text-eco-mint border border-eco-darkBorder font-semibold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-eco-mint animate-pulse"></span>
+                            ST_Buffer Active
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 2-COL WORKBENCH: CONTROLS + MAP vs. OUTPUT TABS -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-eco-border">
+                    
+                    <!-- LEFT COLUMN: INPUT CONTROLS & MAP (5 COLS) -->
+                    <div class="lg:col-span-5 p-6 bg-eco-lightBg space-y-5">
+                        
+                        <form id="eia-form" onsubmit="runAudit(event)" class="space-y-4">
+                            
+                            <!-- Coordinate Inputs -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-mono font-bold text-zinc-600 mb-1">
+                                        Center Latitude
+                                    </label>
+                                    <input type="number" step="0.000001" id="input-lat" value="27.0238" required
+                                        class="w-full bg-white border border-eco-border focus:border-eco-moss rounded-lg px-3 py-2 text-sm font-mono text-eco-deep focus:outline-none shadow-eco-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-mono font-bold text-zinc-600 mb-1">
+                                        Center Longitude
+                                    </label>
+                                    <input type="number" step="0.000001" id="input-lng" value="76.3557" required
+                                        class="w-full bg-white border border-eco-border focus:border-eco-moss rounded-lg px-3 py-2 text-sm font-mono text-eco-deep focus:outline-none shadow-eco-sm">
+                                </div>
+                            </div>
+
+                            <!-- Sliders: Footprint Area & Radial Buffer -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="text-[11px] font-mono font-bold text-zinc-600">Footprint</label>
+                                        <span id="footprint-val" class="text-xs font-mono font-bold text-infra-terracotta">45 Ha</span>
+                                    </div>
+                                    <input type="range" id="input-footprint" min="2" max="250" value="45"
+                                        oninput="updateFootprint(this.value)"
+                                        class="w-full h-1.5 bg-zinc-300 rounded appearance-none cursor-pointer accent-eco-moss">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="text-[11px] font-mono font-bold text-zinc-600">Radial Buffer</label>
+                                        <span id="buffer-val" class="text-xs font-mono font-bold text-eco-moss">10 km</span>
+                                    </div>
+                                    <input type="range" id="input-buffer" min="1" max="25" value="10"
+                                        oninput="updateBufferRadius(this.value)"
+                                        class="w-full h-1.5 bg-zinc-300 rounded appearance-none cursor-pointer accent-eco-moss">
+                                </div>
+                            </div>
+
+                            <!-- Sector Classification Dropdown -->
+                            <div>
+                                <label class="block text-[11px] font-mono font-bold text-zinc-600 mb-1">
+                                    Project Industry Classification
+                                </label>
+                                <select id="input-category"
+                                    class="w-full bg-white border border-eco-border focus:border-eco-moss rounded-lg px-3 py-2 text-xs font-medium text-eco-deep focus:outline-none shadow-eco-sm">
+                                    <option value="cat_a_mining">Category A: Mining & Mineral Extraction (>50 Ha)</option>
+                                    <option value="cat_a_chem">Category A: Synthetic Organic Chemicals & Heavy Metallurgy</option>
+                                    <option value="cat_b1_hydro">Category B1: Hydroelectric & River Valley Project</option>
+                                    <option value="cat_b1_infra">Category B1: Highways & Multimodal Logistics Park</option>
+                                    <option value="cat_b2_solar">Category B2: Solar PV & Wind Clean Energy Farm</option>
+                                    <option value="cat_a_port">Category A: Ports, Harbours & Coastal Dredging</option>
+                                </select>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" id="btn-run-audit"
+                                class="w-full py-3 rounded-lg bg-eco-deep hover:bg-eco-pine text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-eco-sm active:scale-95">
+                                <i data-lucide="play-circle" class="w-4 h-4 text-eco-mint"></i>
+                                <span>Execute Spatial Screening Audit</span>
+                            </button>
+
+                        </form>
+
+                        <!-- Leaflet Map Canvas Box -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-zinc-500 font-semibold">
+                                <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-infra-terracotta"></i> Dynamic Leaflet PostGIS Map</span>
+                                <span>Click/Drag Pin to Relocate</span>
+                            </div>
+                            <div id="gis-map" class="h-60 w-full rounded-xl border border-eco-border shadow-eco-sm"></div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: RESULTS, TABS & PIPELINE (7 COLS) -->
+                    <div class="lg:col-span-7 p-6 bg-white flex flex-col justify-between space-y-5">
+                        
+                        <!-- AUDIT SUMMARY HEADER CARDS -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-3 rounded-xl bg-eco-lightBg border border-eco-border">
+                                <div class="text-[10px] font-mono uppercase font-bold text-zinc-500">Statutory Class</div>
+                                <div id="res-category" class="font-display font-extrabold text-lg text-infra-terracotta">CATEGORY A</div>
+                                <div class="text-[10px] text-zinc-500 font-mono">EIA Notification 2006</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-eco-lightBg border border-eco-border">
+                                <div class="text-[10px] font-mono uppercase font-bold text-zinc-500">Jurisdiction</div>
+                                <div id="res-jurisdiction" class="font-display font-extrabold text-lg text-eco-deep">EAC (MoEFCC)</div>
+                                <div class="text-[10px] text-zinc-500 font-mono">Central Review Level</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-eco-lightBg border border-eco-border">
+                                <div class="text-[10px] font-mono uppercase font-bold text-zinc-500">PostGIS Latency</div>
+                                <div id="res-latency" class="font-display font-extrabold text-lg text-eco-moss">&lt; 0.38s</div>
+                                <div class="text-[10px] text-zinc-500 font-mono">Zero CAD Polygon Tracing</div>
+                            </div>
+                        </div>
+
+                        <!-- 4 DYNAMIC OUTPUT TABS -->
+                        <div class="space-y-4">
+                            
+                            <!-- Tab Bar -->
+                            <div class="flex items-center gap-1 border-b border-eco-border pb-2 overflow-x-auto text-xs font-semibold">
+                                <button onclick="switchTab('tab-telemetry')" id="btn-tab-telemetry"
+                                    class="tab-btn px-3 py-1.5 rounded-lg bg-eco-deep text-white flex items-center gap-1.5 transition-colors">
+                                    <i data-lucide="radar" class="w-3.5 h-3.5 text-eco-mint"></i>
+                                    <span>Risk Radar & Telemetry</span>
+                                </button>
+                                <button onclick="switchTab('tab-layers')" id="btn-tab-layers"
+                                    class="tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-eco-deep flex items-center gap-1.5 transition-colors">
+                                    <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                                    <span>Spatial Layer Joins</span>
+                                </button>
+                                <button onclick="switchTab('tab-emp')" id="btn-tab-emp"
+                                    class="tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-eco-deep flex items-center gap-1.5 transition-colors">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                    <span>Gemini AI EMP Plan</span>
+                                </button>
+                                <button onclick="switchTab('tab-json')" id="btn-tab-json"
+                                    class="tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-eco-deep flex items-center gap-1.5 transition-colors">
+                                    <i data-lucide="code-2" class="w-3.5 h-3.5"></i>
+                                    <span>JSON Schema</span>
+                                </button>
+                            </div>
+
+                            <!-- TAB 1: RISK RADAR & TELEMETRY -->
+                            <div id="tab-telemetry" class="tab-content block space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                                    <div class="sm:col-span-6 h-48 flex items-center justify-center bg-eco-lightBg rounded-xl p-2 border border-eco-border">
+                                        <canvas id="radarChartCanvas"></canvas>
+                                    </div>
+                                    <div class="sm:col-span-6 space-y-2.5">
+                                        <div class="p-2.5 rounded-lg bg-eco-lightBg border border-eco-border flex items-center justify-between text-xs font-mono">
+                                            <span class="text-zinc-600 font-medium">Forest Canopy Cover:</span>
+                                            <span id="tel-canopy" class="font-bold text-eco-moss">34.2% Dense Canopy</span>
+                                        </div>
+                                        <div class="p-2.5 rounded-lg bg-eco-lightBg border border-eco-border flex items-center justify-between text-xs font-mono">
+                                            <span class="text-zinc-600 font-medium">CPCB Baseline AQI PM2.5:</span>
+                                            <span id="tel-aqi" class="font-bold text-infra-terracotta">142 µg/m³ (Severe)</span>
+                                        </div>
+                                        <div class="p-2.5 rounded-lg bg-eco-lightBg border border-eco-border flex items-center justify-between text-xs font-mono">
+                                            <span class="text-zinc-600 font-medium">Eco-Sensitive Zone Proximity:</span>
+                                            <span id="tel-esz" class="font-bold text-amber-600">4.2 km (Overlap)</span>
+                                        </div>
+                                        <div class="p-2.5 rounded-lg bg-eco-lightBg border border-eco-border flex items-center justify-between text-xs font-mono">
+                                            <span class="text-zinc-600 font-medium">Perennial Water Table:</span>
+                                            <span id="tel-hydro" class="font-bold text-blue-600">820m Basin Buffer</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 2: SPATIAL BUFFER INTERSECTION TABLE -->
+                            <div id="tab-layers" class="tab-content hidden">
+                                <div class="overflow-x-auto rounded-xl border border-eco-border">
+                                    <table class="w-full text-left text-xs font-mono">
+                                        <thead class="bg-eco-lightBg text-zinc-600 border-b border-eco-border uppercase text-[10px]">
+                                            <tr>
+                                                <th class="py-2.5 px-3">Geospatial Layer</th>
+                                                <th class="py-2.5 px-3">Spatial Distance</th>
+                                                <th class="py-2.5 px-3">Statutory Cross-Check</th>
+                                                <th class="py-2.5 px-3">Clearance Trigger</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-eco-border text-zinc-700 bg-white">
+                                            <tr>
+                                                <td class="py-2 px-3 font-semibold text-eco-deep">Wildlife Sanctuary Buffer</td>
+                                                <td class="py-2 px-3 text-amber-600">4.2 km (Inside ESZ)</td>
+                                                <td class="py-2 px-3">WPA 1972 / NBWL</td>
+                                                <td class="py-2 px-3 font-semibold text-eco-moss">NBWL Standing Committee NOC</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 font-semibold text-eco-deep">Reserved Forest Patch</td>
+                                                <td class="py-2 px-3 text-eco-moss">1.8 km Northwest</td>
+                                                <td class="py-2 px-3">Forest Act 1980</td>
+                                                <td class="py-2 px-3 text-zinc-500">Stage-I Forest Clearance</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 font-semibold text-eco-deep">Perennial River Drainage Basin</td>
+                                                <td class="py-2 px-3 text-blue-600">820m South</td>
+                                                <td class="py-2 px-3">Water Act 1974</td>
+                                                <td class="py-2 px-3 font-semibold text-infra-terracotta">Zero Liquid Discharge (ZLD)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 font-semibold text-eco-deep">Endangered Flora Habitat</td>
+                                                <td class="py-2 px-3 text-zinc-500">High Occurrence</td>
+                                                <td class="py-2 px-3">Biodiversity Act 2002</td>
+                                                <td class="py-2 px-3 font-semibold text-eco-moss">33% Native Afforestation</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- TAB 3: GEMINI AI STATUTORY EMP PLAN -->
+                            <div id="tab-emp" class="tab-content hidden space-y-3">
+                                <div class="p-4 rounded-xl bg-eco-deep text-white border border-eco-darkBorder">
+                                    <div class="flex items-center gap-2 text-xs font-mono font-bold text-eco-mint mb-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                        Gemini 2.0 Statutory EMP Mitigation Directives
+                                    </div>
+                                    <div id="emp-content-text" class="text-xs text-zinc-300 space-y-2 leading-relaxed font-normal">
+                                        <p><strong class="text-white">1. Air Quality Abatement:</strong> Baseline PM2.5 in this industrial cluster exceeds NAAQS standards (142 µg/m³). High-efficiency Electrostatic Precipitators (ESP) with 99.5% particulate capture and continuous online emission monitoring systems (CEMS) connected to CPCB cloud are mandated.</p>
+                                        <p><strong class="text-white">2. Hydrological Zero-Discharge:</strong> Due to proximity to surface drainage basin (820m), zero effluent discharge is mandated. A 500 KLD Sewage Treatment Plant (STP) + RO recycle unit must be commissioned prior to operational clearance.</p>
+                                        <p><strong class="text-white">3. Green Belt & Afforestation:</strong> A mandatory 33% green buffer zone along the project boundary with a density of 2,500 trees/hectare (native species: <i>Neem, Peepal, Dhok</i>) is statutory requirement under MoEFCC guidelines.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 4: VALIDATED JSON SCHEMA STREAM -->
+                            <div id="tab-json" class="tab-content hidden relative">
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <span class="text-[11px] font-mono text-zinc-500">Validated JSON Schema Output:</span>
+                                    <button onclick="copyJSONSchema()" class="text-xs font-mono text-eco-moss hover:text-eco-deep font-bold flex items-center gap-1 transition-colors">
+                                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                        <span id="copy-json-label">Copy JSON</span>
+                                    </button>
+                                </div>
+                                <pre class="bg-infra-slate p-4 rounded-xl border border-zinc-700 text-[11px] font-mono overflow-x-auto text-zinc-300 max-h-60 leading-relaxed"><code id="json-schema-code">{
+  "ecoryx_version": "2.4.1",
+  "audit_timestamp": "2026-08-23T00:40:00Z",
+  "project_metadata": {
+    "center_coordinates": { "lat": 27.0238, "lng": 76.3557 },
+    "footprint_hectares": 45,
+    "radial_buffer_km": 10,
+    "industry_category": "cat_a_mining",
+    "statutory_rulebook": "moefcc_2006_amended"
+  },
+  "spatial_buffer_analytics": {
+    "postgis_execution_ms": 38.4,
+    "nearest_sanctuary_km": 4.2,
+    "within_eco_sensitive_zone": true,
+    "hydrological_risk_level": "MODERATE",
+    "baseline_aqi_pm25": 142.6
+  },
+  "compliance_verdict": {
+    "status": "CONDITIONAL_CLEARANCE",
+    "composite_risk_score": 62,
+    "public_hearing_mandated": true,
+    "emp_stipulations_count": 5
+  }
+}</code></pre>
+                            </div>
+
+                        </div>
+
+                        <!-- EXPORT & ACTIONS -->
+                        <div class="pt-3 border-t border-eco-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                            <button onclick="downloadReportPDF()"
+                                class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-eco-deep hover:bg-eco-pine text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-eco-sm active:scale-95">
+                                <i data-lucide="file-down" class="w-4 h-4 text-eco-mint"></i>
+                                <span>Download Pre-Feasibility EIA Dossier (PDF)</span>
+                            </button>
+                            <span class="text-[11px] font-mono text-zinc-500">
+                                Spatial Query Time: <strong class="text-eco-moss font-bold">0.384s</strong>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 3: TECHNICAL ARCHITECTURE (BENTO GRID) -->
+        <!-- ========================================================================= -->
+        <section id="architecture" class="py-16 sm:py-24 bg-white border-y border-eco-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-eco-lightBg border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase mb-3">
+                            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                            Core Technical Architecture
+                        </div>
+                        <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-eco-deep tracking-tight">
+                            Engineered for scale. <br /><span class="text-eco-moss">Built for statutory certainty.</span>
+                        </h2>
+                    </div>
+                    <p class="text-zinc-600 max-w-md text-sm sm:text-base font-normal">
+                        A robust programmatic pipeline coupling PostGIS spatial indexing with Gemini 2.0 Flash LLM statutory compliance reasoning.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <!-- Architecture Card 1 -->
+                    <div class="solid-eco-card p-6 space-y-4">
+                        <div class="w-10 h-10 rounded-lg bg-eco-deep text-eco-mint flex items-center justify-center font-mono font-bold">
+                            01
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-eco-deep">PostGIS 3.4 Spatial Joins</h3>
+                        <p class="text-xs text-zinc-600 leading-relaxed font-normal">
+                            GiST R-Tree indexed spatial querying across 12+ national geospatial layers. Runs sub-second <code class="bg-eco-lightBg px-1 py-0.5 rounded text-eco-moss font-mono">ST_DWithin()</code> and <code class="bg-eco-lightBg px-1 py-0.5 rounded text-eco-moss font-mono">ST_Buffer()</code> queries for Eco-Sensitive Zones.
+                        </p>
+                    </div>
+
+                    <!-- Architecture Card 2 -->
+                    <div class="solid-eco-card p-6 space-y-4">
+                        <div class="w-10 h-10 rounded-lg bg-infra-steel text-white flex items-center justify-center font-mono font-bold">
+                            02
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-eco-deep">Live Satellite Telemetry</h3>
+                        <p class="text-xs text-zinc-600 leading-relaxed font-normal">
+                            Continuously ingests Sentinel-2 multi-spectral NDVI vegetative density, Copernicus atmospheric datasets, and live CPCB ambient air quality telemetry across all radial envelopes.
+                        </p>
+                    </div>
+
+                    <!-- Architecture Card 3 -->
+                    <div class="solid-eco-card p-6 space-y-4">
+                        <div class="w-10 h-10 rounded-lg bg-eco-moss text-white flex items-center justify-center font-mono font-bold">
+                            03
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-eco-deep">Gemini 2.0 Statutory Parser</h3>
+                        <p class="text-xs text-zinc-600 leading-relaxed font-normal">
+                            Cross-references spatial intersections against MoEFCC EIA Notification 2006, Forest Conservation Act 1980, and CRZ 2019 to auto-assign Category A / B1 / B2 clearance pathways.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 4: BUREAUCRACY VS ECORYX ROTARY SCROLLER / COMPARISON -->
+        <!-- ========================================================================= -->
+        <section id="comparison" class="py-16 sm:py-24 topo-bg border-b border-eco-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase mb-3 shadow-eco-sm">
+                        <span class="w-2 h-2 rounded-full bg-eco-moss animate-pulse"></span>
+                        Clearance Transformation Engine
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-eco-deep tracking-tight mb-3">
+                        Months of Bureaucracy vs. Sub-Second Screening
+                    </h2>
+                    <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+                        Rotate the tactile dial below to see the stark contrast between traditional 6-month manual EIA friction and Ecoryx automated geospatial clearance.
+                    </p>
+                </div>
+
+                <!-- ROTARY DIAL SWITCH WIDGET -->
+                <div class="flex justify-center mb-10">
+                    <div class="rotary-switch-box">
+                        <button type="button" id="btn-comp-before" onclick="setComparisonState('before')"
+                            class="switch-tab-btn active-before">
+                            <i data-lucide="history" class="w-4 h-4"></i>
+                            <span>Traditional 6-Month Process</span>
+                        </button>
+
+                        <div class="rotary-socket" id="comp-rotary-dial" onclick="toggleComparisonState()" title="Click to rotate dial">
+                            <div class="rotary-knob state-before" id="comp-rotary-knob">
+                                <div class="rotary-pointer"></div>
+                                <div class="rotary-center-cap"></div>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btn-comp-after" onclick="setComparisonState('after')"
+                            class="switch-tab-btn inactive">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            <span>Ecoryx Automated Screening</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COMPARISON PANELS -->
+                <div id="comp-panel-before" class="block">
+                    <div class="solid-eco-card p-6 sm:p-10 border-red-200 bg-red-50/30">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-red-100 text-red-800 text-xs font-mono font-bold">
+                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+                                    Traditional Manual Environmental Assessment
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-display font-extrabold text-zinc-900">
+                                    4 to 6 Months of Fragmented Consultant Surveys
+                                </h3>
+                                <p class="text-sm text-zinc-700 leading-relaxed">
+                                    Field consultants manually visit sites, trace polygons across disjointed state paper maps, and compile static 300-page PDF reports. Overlooked wildlife corridors lead to severe litigation and judicial project halts.
+                                </p>
+                                <div class="grid grid-cols-3 gap-3 pt-2">
+                                    <div class="p-3 bg-white rounded-lg border border-red-200">
+                                        <div class="text-2xl font-mono font-bold text-red-700">180+ Days</div>
+                                        <div class="text-[11px] text-zinc-500">Average Turnaround</div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-lg border border-red-200">
+                                        <div class="text-2xl font-mono font-bold text-red-700">₹45 Lakhs</div>
+                                        <div class="text-[11px] text-zinc-500">Manual Survey Cost</div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-lg border border-red-200">
+                                        <div class="text-2xl font-mono font-bold text-red-700">68%</div>
+                                        <div class="text-[11px] text-zinc-500">SEAC Review Stall Rate</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-red-200 space-y-3 font-mono text-xs">
+                                <div class="font-bold text-red-800 uppercase border-b border-red-100 pb-2">Common Clearance Pitfalls:</div>
+                                <div class="text-zinc-600 flex items-start gap-2">
+                                    <span class="text-red-600 font-bold">✕</span> Unindexed Eco-Sensitive Zone (ESZ) boundary overlap
+                                </div>
+                                <div class="text-zinc-600 flex items-start gap-2">
+                                    <span class="text-red-600 font-bold">✕</span> Outdated CPCB seasonal ambient air quality baselines
+                                </div>
+                                <div class="text-zinc-600 flex items-start gap-2">
+                                    <span class="text-red-600 font-bold">✕</span> Missing Forest Rights Act (FRA) Gram Sabha notifications
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="comp-panel-after" class="hidden">
+                    <div class="solid-eco-card p-6 sm:p-10 border-eco-moss bg-eco-lightBg">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-eco-pine text-eco-mint text-xs font-mono font-bold">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                    Ecoryx Automated Screening Platform
+                                </div>
+                                <h3 class="text-2xl sm:text-3xl font-display font-extrabold text-eco-deep">
+                                    Sub-Second Multi-Layer Geospatial Compliance
+                                </h3>
+                                <p class="text-sm text-zinc-700 leading-relaxed">
+                                    Drop project coordinates, select sector schedule, and instantly obtain an audit-ready clearance dossier with automated Form-1 drafts, live risk radar telemetry, and statutory EMP stipulations.
+                                </p>
+                                <div class="grid grid-cols-3 gap-3 pt-2">
+                                    <div class="p-3 bg-white rounded-lg border border-eco-border">
+                                        <div class="text-2xl font-mono font-bold text-eco-moss">&lt; 0.4s</div>
+                                        <div class="text-[11px] text-zinc-500">Query Latency</div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-lg border border-eco-border">
+                                        <div class="text-2xl font-mono font-bold text-eco-moss">100%</div>
+                                        <div class="text-[11px] text-zinc-500">Zero CAD Tracing</div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-lg border border-eco-border">
+                                        <div class="text-2xl font-mono font-bold text-eco-moss">Audit-Ready</div>
+                                        <div class="text-[11px] text-zinc-500">MoEFCC EIA Format</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-eco-border space-y-3 font-mono text-xs">
+                                <div class="font-bold text-eco-deep uppercase border-b border-eco-border pb-2">Ecoryx Automation Benefits:</div>
+                                <div class="text-zinc-700 flex items-start gap-2">
+                                    <span class="text-eco-moss font-bold">✓</span> Sub-second PostGIS radial buffer intersections
+                                </div>
+                                <div class="text-zinc-700 flex items-start gap-2">
+                                    <span class="text-eco-moss font-bold">✓</span> Real-time Sentinel-2 vegetation & CPCB air dispersion
+                                </div>
+                                <div class="text-zinc-700 flex items-start gap-2">
+                                    <span class="text-eco-moss font-bold">✓</span> Automated PDF Compliance Summary & ToR generation
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 5: DEVELOPER-FIRST API PLAYGROUND -->
+        <!-- ========================================================================= -->
+        <section id="api" class="py-16 sm:py-24 bg-white border-b border-eco-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-eco-lightBg border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase mb-3">
+                            <i data-lucide="code-2" class="w-3.5 h-3.5"></i>
+                            Programmatic Access
+                        </div>
+                        <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-eco-deep tracking-tight">
+                            Developer-First API Playground
+                        </h2>
+                    </div>
+                    <p class="text-zinc-600 max-w-md text-sm font-normal">
+                        Integrate Ecoryx directly into infrastructure project workflows, PM GatiShakti portals, or enterprise GIS pipelines.
+                    </p>
+                </div>
+
+                <div class="solid-eco-card bg-infra-slate text-white p-6 sm:p-8 rounded-2xl overflow-hidden shadow-infra-md">
+                    
+                    <div class="flex items-center justify-between border-b border-zinc-700 pb-4 mb-4 flex-wrap gap-3">
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="px-2.5 py-1 rounded bg-eco-moss text-white font-bold">POST</span>
+                            <span class="text-zinc-300">https://api.ecoryx.io/v1/spatial-screening</span>
+                        </div>
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <button onclick="switchApiLang('curl')" id="btn-api-curl" class="px-2.5 py-1 rounded bg-zinc-700 text-white font-bold">cURL</button>
+                            <button onclick="switchApiLang('python')" id="btn-api-python" class="px-2.5 py-1 rounded text-zinc-400 hover:text-white">Python</button>
+                            <button onclick="switchApiLang('ts')" id="btn-api-ts" class="px-2.5 py-1 rounded text-zinc-400 hover:text-white">TypeScript</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <div class="lg:col-span-7">
+                            <pre class="bg-[#050B08] p-4 rounded-xl border border-zinc-800 text-xs font-mono text-zinc-300 overflow-x-auto leading-relaxed"><code id="api-code-snippet">curl -X POST https://api.ecoryx.io/v1/spatial-screening \
+  -H "Authorization: Bearer ecoryx_live_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "center_lat": 27.0238,
+    "center_lng": 76.3557,
+    "footprint_ha": 45,
+    "buffer_km": 10,
+    "sector": "mining"
+  }'</code></pre>
+                        </div>
+                        <div class="lg:col-span-5 space-y-4">
+                            <div class="text-xs text-zinc-400 font-mono">
+                                Returns structured compliance categorization, statutory trigger lists, and AI mitigation directives in &lt; 400ms.
+                            </div>
+                            <button onclick="triggerApiPlayground()" id="btn-test-api"
+                                class="w-full py-3 rounded-lg bg-eco-moss hover:bg-eco-leaf text-white font-mono font-bold text-xs transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span>Send Test API Request</span>
+                            </button>
+                            <div id="api-response-pill" class="hidden p-3 rounded-lg bg-[#050B08] border border-eco-moss/40 text-[11px] font-mono text-eco-mint">
+                                Status: 200 OK — Execution Latency: 38.4ms
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 6: ROI & SAVINGS CALCULATOR (THAT MODEL TO CALCULATE EVERYTHING) -->
+        <!-- ========================================================================= -->
+        <section id="roi-calc" class="py-16 sm:py-24 topo-bg border-b border-eco-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="solid-eco-card p-8 sm:p-12 shadow-eco-lg">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+
+                        <!-- Left Sliders Column (6 Cols) -->
+                        <div class="lg:col-span-6 space-y-6">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-eco-lightBg border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase">
+                                <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+                                Dynamic Economic Value Model
+                            </div>
+
+                            <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-eco-deep tracking-tight">
+                                Calculate Government & Developer Time Savings
+                            </h2>
+
+                            <p class="text-zinc-600 text-sm leading-relaxed font-normal">
+                                Adjust the interactive parameters below to see the direct capital and turnaround time saved across state infrastructure divisions.
+                            </p>
+
+                            <!-- Interactive Sliders -->
+                            <div class="space-y-5 font-mono text-xs">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1 font-bold">
+                                        <label class="text-zinc-700">Infrastructure Projects Per Year</label>
+                                        <span id="calc-projects-val" class="text-eco-moss font-bold bg-eco-lightBg px-2 py-0.5 rounded border border-eco-border">150 Projects</span>
+                                    </div>
+                                    <input type="range" id="calc-projects" min="10" max="500" value="150" step="10"
+                                        oninput="updateROICalculator()"
+                                        class="w-full h-1.5 bg-zinc-300 rounded appearance-none cursor-pointer accent-eco-moss">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1 font-bold">
+                                        <label class="text-zinc-700">Average Manual Consultant Review Time</label>
+                                        <span id="calc-months-val" class="text-infra-terracotta font-bold bg-eco-lightBg px-2 py-0.5 rounded border border-eco-border">4.5 Months</span>
+                                    </div>
+                                    <input type="range" id="calc-months" min="1" max="12" value="4.5" step="0.5"
+                                        oninput="updateROICalculator()"
+                                        class="w-full h-1.5 bg-zinc-300 rounded appearance-none cursor-pointer accent-infra-terracotta">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between items-center mb-1 font-bold">
+                                        <label class="text-zinc-700">Average Spend per Consultant Survey</label>
+                                        <span id="calc-cost-val" class="text-eco-deep font-bold bg-eco-lightBg px-2 py-0.5 rounded border border-eco-border">₹25 Lakhs</span>
+                                    </div>
+                                    <input type="range" id="calc-cost" min="5" max="100" value="25" step="5"
+                                        oninput="updateROICalculator()"
+                                        class="w-full h-1.5 bg-zinc-300 rounded appearance-none cursor-pointer accent-eco-deep">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Output Cards (6 Cols) -->
+                        <div class="lg:col-span-6 space-y-4">
+                            
+                            <div class="p-6 rounded-2xl bg-eco-deep text-white shadow-eco-md space-y-2">
+                                <div class="font-mono text-xs text-eco-mint uppercase tracking-wider font-bold">Total Capital Retained</div>
+                                <div id="calc-res-money" class="text-4xl sm:text-5xl font-mono font-extrabold text-white">
+                                    ₹37.50 Crores
+                                </div>
+                                <p class="text-xs text-zinc-300 font-normal">
+                                    Eliminates repetitive manual field surveying & consultant GIS drafting fees.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="p-5 rounded-xl bg-white border border-eco-border shadow-eco-sm">
+                                    <div class="font-mono text-[10px] uppercase font-bold text-zinc-500">Turnaround Saved</div>
+                                    <div id="calc-res-time" class="text-2xl sm:text-3xl font-mono font-extrabold text-eco-moss mt-1">
+                                        675 Months
+                                    </div>
+                                    <div class="text-[11px] text-zinc-500 mt-0.5">Accelerated statutory delivery</div>
+                                </div>
+
+                                <div class="p-5 rounded-xl bg-white border border-eco-border shadow-eco-sm">
+                                    <div class="font-mono text-[10px] uppercase font-bold text-zinc-500">Efficiency Gain</div>
+                                    <div class="text-2xl sm:text-3xl font-mono font-extrabold text-infra-terracotta mt-1">
+                                        99.8%
+                                    </div>
+                                    <div class="text-[11px] text-zinc-500 mt-0.5">Instant spatial queries</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 7: ONE-LINE PRODUCT DEFINITION & HACKATHON DELIVERABLES -->
+        <!-- ========================================================================= -->
+        <section id="hackathon-pitch" class="py-16 sm:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+                
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-eco-lightBg border border-eco-border text-xs font-mono font-bold text-eco-moss uppercase">
+                    SIH 2026 Pitch Summary
+                </div>
+
+                <h2 class="text-2xl sm:text-4xl font-display font-extrabold text-eco-deep max-w-3xl mx-auto leading-snug">
+                    "Ecoryx converts simple project coordinates into a multi-layer environmental risk assessment, statutory compliance audit, and AI-assisted preliminary EIA report with zero manual GIS polygon tracing."
+                </h2>
+
+                <div class="pt-4 flex justify-center gap-4">
+                    <button onclick="scrollToSimulator()"
+                        class="px-6 py-3 rounded-lg bg-eco-deep hover:bg-eco-pine text-white text-xs font-bold transition-all shadow-eco-sm flex items-center gap-2">
+                        <i data-lucide="play" class="w-4 h-4 text-eco-mint"></i>
+                        <span>Try Live Screening Engine Now</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-eco-deep text-white border-t border-eco-darkBorder py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono text-xs text-zinc-400">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-md bg-eco-pine flex items-center justify-center text-eco-mint font-bold">
+                    <i data-lucide="trees" class="w-4 h-4"></i>
+                </div>
+                <span class="font-display font-bold text-white text-sm">Ecoryx Geospatial</span>
+                <span>— SIH 2026 Submission</span>
+            </div>
+            <div>
+                © 2026 Ecoryx Automated Environmental Impact Assessment Platform.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & SIMULATOR ENGINE -->
+    <script>
+        // Preset Scenarios
+        const PRESETS = {
+            aravalli: {
+                lat: 27.0238,
+                lng: 76.3557,
+                footprint: 45,
+                buffer: 10,
+                category: 'cat_a_mining',
+                categoryLabel: 'CATEGORY A',
+                jurisdiction: 'EAC (MoEFCC)',
+                canopy: '34.2% Dense Canopy',
+                aqi: '142 µg/m³ (Severe)',
+                esz: '4.2 km (Inside ESZ)',
+                hydro: '820m Basin Buffer',
+                radar: [85, 90, 75, 80, 95]
+            },
+            western_ghats: {
+                lat: 13.1230,
+                lng: 75.2890,
+                footprint: 120,
+                buffer: 15,
+                category: 'cat_b1_hydro',
+                categoryLabel: 'CATEGORY A',
+                jurisdiction: 'EAC (MoEFCC)',
+                canopy: '88.5% Evergreen',
+                aqi: '38 µg/m³ (Good)',
+                esz: '1.2 km (ESA Core)',
+                hydro: 'Direct River Inundation',
+                radar: [95, 85, 95, 90, 80]
+            },
+            yamuna_corridor: {
+                lat: 28.1820,
+                lng: 77.4910,
+                footprint: 85,
+                buffer: 8,
+                category: 'cat_b1_infra',
+                categoryLabel: 'CATEGORY B1',
+                jurisdiction: 'SEIAA (State Level)',
+                canopy: '12.4% Scrubland',
+                aqi: '280 µg/m³ (Hazardous)',
+                esz: '8.5 km (Peripheral)',
+                hydro: 'Yamuna Floodplain Buffer',
+                radar: [65, 70, 60, 85, 55]
+            },
+            bhadla_solar: {
+                lat: 27.5380,
+                lng: 71.9160,
+                footprint: 200,
+                buffer: 5,
+                category: 'cat_b2_solar',
+                categoryLabel: 'CATEGORY B2',
+                jurisdiction: 'SPCB FAST-TRACK',
+                canopy: '2.1% Arid Desert',
+                aqi: '65 µg/m³ (Moderate)',
+                esz: '22 km (Exempted)',
+                hydro: 'Dry Desert Canal (3km)',
+                radar: [20, 30, 25, 20, 35]
+            },
+            sundarbans: {
+                lat: 21.8450,
+                lng: 88.3540,
+                footprint: 60,
+                buffer: 12,
+                category: 'cat_a_port',
+                categoryLabel: 'CATEGORY A',
+                jurisdiction: 'EAC + NCZMA',
+                canopy: '76.4% Mangrove',
+                aqi: '45 µg/m³ (Good)',
+                esz: '0.8 km (CRZ-I Intersect)',
+                hydro: 'Tidal Estuary Creek',
+                radar: [90, 95, 80, 70, 90]
+            }
+        };
+
+        // State Tracking
+        let map = null;
+        let marker = null;
+        let bufferCircle = null;
+        let radarChart = null;
+        let comparisonState = 'before';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initLeafletMap();
+            initRadarChart();
+            updateROICalculator();
+        });
+
+        function scrollToSimulator() {
+            const elem = document.getElementById('simulator');
+            if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize Leaflet Map
+        function initLeafletMap() {
+            const defaultCoords = [27.0238, 76.3557];
+            map = L.map('gis-map', { attributionControl: false }).setView(defaultCoords, 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
+            marker.bindPopup("<b>Project Center</b><br>45 Ha Footprint").openPopup();
+
+            bufferCircle = L.circle(defaultCoords, {
+                color: '#1E6F4A',
+                fillColor: '#1E6F4A',
+                fillOpacity: 0.15,
+                radius: 10000
+            }).addTo(map);
+
+            marker.on('dragend', function() {
+                const pos = marker.getLatLng();
+                document.getElementById('input-lat').value = pos.lat.toFixed(6);
+                document.getElementById('input-lng').value = pos.lng.toFixed(6);
+                bufferCircle.setLatLng(pos);
+            });
+
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                bufferCircle.setLatLng(e.latlng);
+                document.getElementById('input-lat').value = e.latlng.lat.toFixed(6);
+                document.getElementById('input-lng').value = e.latlng.lng.toFixed(6);
+            });
+        }
+
+        function updateFootprint(val) {
+            document.getElementById('footprint-val').innerText = val + ' Ha';
+        }
+
+        function updateBufferRadius(val) {
+            document.getElementById('buffer-val').innerText = val + ' km';
+            if (bufferCircle) bufferCircle.setRadius(val * 1000);
+        }
+
+        function loadPreset(key) {
+            const data = PRESETS[key];
+            if (!data) return;
+
+            document.getElementById('input-lat').value = data.lat;
+            document.getElementById('input-lng').value = data.lng;
+            document.getElementById('input-footprint').value = data.footprint;
+            document.getElementById('footprint-val').innerText = data.footprint + ' Ha';
+            document.getElementById('input-buffer').value = data.buffer;
+            document.getElementById('buffer-val').innerText = data.buffer + ' km';
+            document.getElementById('input-category').value = data.category;
+
+            if (map && marker && bufferCircle) {
+                const pos = [data.lat, data.lng];
+                map.setView(pos, 10);
+                marker.setLatLng(pos);
+                bufferCircle.setLatLng(pos);
+                bufferCircle.setRadius(data.buffer * 1000);
+            }
+
+            applyAuditResults(data);
+        }
+
+        function runAudit(e) {
+            e.preventDefault();
+            const cat = document.getElementById('input-category').value;
+            const data = PRESETS.aravalli;
+            applyAuditResults(data);
+        }
+
+        function applyAuditResults(data) {
+            document.getElementById('res-category').innerText = data.categoryLabel;
+            document.getElementById('res-jurisdiction').innerText = data.jurisdiction;
+            document.getElementById('tel-canopy').innerText = data.canopy;
+            document.getElementById('tel-aqi').innerText = data.aqi;
+            document.getElementById('tel-esz').innerText = data.esz;
+            document.getElementById('tel-hydro').innerText = data.hydro;
+
+            if (radarChart) {
+                radarChart.data.datasets[0].data = data.radar;
+                radarChart.update();
+            }
+
+            confetti({
+                particleCount: 35,
+                spread: 50,
+                origin: { y: 0.8 },
+                colors: ['#0A2619', '#1E6F4A', '#7AD3A2']
+            });
+        }
+
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChartCanvas').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Canopy Risk', 'Fauna WPA', 'Airshed AQI', 'Hydrology', 'Statutory Strictness'],
+                    datasets: [{
+                        label: 'Spatial Sensitivity Index',
+                        data: [85, 90, 75, 80, 95],
+                        backgroundColor: 'rgba(30, 111, 74, 0.25)',
+                        borderColor: '#1E6F4A',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0A2619',
+                        pointBorderColor: '#7AD3A2',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#D8E5DD' },
+                            grid: { color: '#E2E8F0' },
+                            pointLabels: {
+                                font: { family: 'Inter', size: 10, weight: 'bold' },
+                                color: '#0F172A'
+                            },
+                            ticks: { display: false, max: 100, min: 0 }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-eco-deep flex items-center gap-1.5 transition-colors';
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = 'tab-btn px-3 py-1.5 rounded-lg bg-eco-deep text-white flex items-center gap-1.5 transition-colors';
+            }
+        }
+
+        function copyJSONSchema() {
+            const code = document.getElementById('json-schema-code').innerText;
+            navigator.clipboard.writeText(code);
+            document.getElementById('copy-json-label').innerText = 'Copied!';
+            setTimeout(() => {
+                document.getElementById('copy-json-label').innerText = 'Copy JSON';
+            }, 2000);
+        }
+
+        // Rotary Comparison Switch
+        function toggleComparisonState() {
+            setComparisonState(comparisonState === 'before' ? 'after' : 'before');
+        }
+
+        function setComparisonState(state) {
+            comparisonState = state;
+            const knob = document.getElementById('comp-rotary-knob');
+            const btnBefore = document.getElementById('btn-comp-before');
+            const btnAfter = document.getElementById('btn-comp-after');
+            const panelBefore = document.getElementById('comp-panel-before');
+            const panelAfter = document.getElementById('comp-panel-after');
+
+            if (state === 'before') {
+                knob.className = 'rotary-knob state-before';
+                btnBefore.className = 'switch-tab-btn active-before';
+                btnAfter.className = 'switch-tab-btn inactive';
+                panelBefore.classList.remove('hidden');
+                panelAfter.classList.add('hidden');
+            } else {
+                knob.className = 'rotary-knob state-after';
+                btnBefore.className = 'switch-tab-btn inactive';
+                btnAfter.className = 'switch-tab-btn active-after';
+                panelBefore.classList.add('hidden');
+                panelAfter.classList.remove('hidden');
+            }
+        }
+
+        // Developer API Playground
+        const API_SNIPPETS = {
+            curl: `curl -X POST https://api.ecoryx.io/v1/spatial-screening \\
+  -H "Authorization: Bearer ecoryx_live_key" \\
+  -H "Content-Type: application/json" \\
+  -d '{"center_lat": 27.0238, "center_lng": 76.3557, "footprint_ha": 45, "buffer_km": 10}'`,
+            python: `import requests
+
+url = "https://api.ecoryx.io/v1/spatial-screening"
+payload = {
+    "center_lat": 27.0238,
+    "center_lng": 76.3557,
+    "footprint_ha": 45,
+    "buffer_km": 10
+}
+headers = {"Authorization": "Bearer ecoryx_live_key"}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())`,
+            ts: `import axios from 'axios';
+
+const { data } = await axios.post('https://api.ecoryx.io/v1/spatial-screening', {
+  center_lat: 27.0238,
+  center_lng: 76.3557,
+  footprint_ha: 45,
+  buffer_km: 10
+}, {
+  headers: { Authorization: 'Bearer ecoryx_live_key' }
+});
+
+console.log(data.compliance_verdict);`
+        };
+
+        function switchApiLang(lang) {
+            document.getElementById('api-code-snippet').innerText = API_SNIPPETS[lang];
+            ['curl', 'python', 'ts'].forEach(l => {
+                const btn = document.getElementById('btn-api-' + l);
+                if (l === lang) {
+                    btn.className = 'px-2.5 py-1 rounded bg-zinc-700 text-white font-bold';
+                } else {
+                    btn.className = 'px-2.5 py-1 rounded text-zinc-400 hover:text-white';
+                }
+            });
+        }
+
+        function triggerApiPlayground() {
+            const btn = document.getElementById('btn-test-api');
+            const pill = document.getElementById('api-response-pill');
+            btn.innerHTML = '<span class="animate-spin">⟳</span> Sending Request...';
+            setTimeout(() => {
+                btn.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i><span>Send Test API Request</span>';
+                lucide.createIcons();
+                pill.classList.remove('hidden');
+            }, 380);
+        }
+
+        // ROI Calculator
+        function updateROICalculator() {
+            const projects = parseFloat(document.getElementById('calc-projects').value);
+            const months = parseFloat(document.getElementById('calc-months').value);
+            const costLakhs = parseFloat(document.getElementById('calc-cost').value);
+
+            document.getElementById('calc-projects-val').innerText = projects + ' Projects';
+            document.getElementById('calc-months-val').innerText = months + ' Months';
+            document.getElementById('calc-cost-val').innerText = '₹' + costLakhs + ' Lakhs';
+
+            const totalTimeSaved = Math.round(projects * months);
+            const totalMoneyCrores = ((projects * costLakhs) / 100).toFixed(2);
+
+            document.getElementById('calc-res-time').innerText = totalTimeSaved + ' Months';
+            document.getElementById('calc-res-money').innerText = '₹' + totalMoneyCrores + ' Crores';
+        }
+
+        // PDF Export
+        function downloadReportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const lat = document.getElementById('input-lat').value;
+            const lng = document.getElementById('input-lng').value;
+            const footprint = document.getElementById('input-footprint').value;
+            const buffer = document.getElementById('input-buffer').value;
+
+            // Header Banner
+            doc.setFillColor(10, 38, 25);
+            doc.rect(0, 0, 210, 32, 'F');
+
+            doc.setTextColor(122, 211, 162);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text("ECORYX GEOSPATIAL ENVIRONMENTAL CLEARANCE REPORT", 14, 15);
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.text("Automated Pre-Feasibility Statutory EIA Screening // MoEFCC Framework", 14, 23);
+
+            // Document Info
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(11);
+            doc.text("1. PROJECT COORDINATE & SPATIAL PROFILE", 14, 45);
+
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Centroid Coordinates: Latitude ${lat}, Longitude ${lng}`, 14, 53);
+            doc.text(`Project Footprint: ${footprint} Hectares`, 14, 60);
+            doc.text(`Radial Buffer Envelope: ${buffer} km Eco-Sensitive Zone`, 14, 67);
+            doc.text(`Timestamp: ${new Date().toUTCString()}`, 14, 74);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text("2. STATUTORY CLEARANCE CATEGORIZATION", 14, 88);
+
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text("Statutory Classification: CATEGORY 'A' (Central EAC Review)", 14, 96);
+            doc.text("Regulatory Act: MoEFCC EIA Notification 2006 (Amended)", 14, 103);
+            doc.text("Competent Scrutiny Level: Expert Appraisal Committee (EAC)", 14, 110);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text("3. SPATIAL BUFFER INTERSECTIONS", 14, 125);
+
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text("✦ Forest (Conservation) Act 1980: Stage-I Clearance Applicable", 14, 133);
+            doc.text("✦ Wildlife Protection Act 1972: NBWL Standing Committee NOC Required", 14, 140);
+            doc.text("✦ Water Act 1974: Zero Liquid Discharge (ZLD) Mandate", 14, 147);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text("4. GEMINI 2.0 STATUTORY MITIGATION PLAN", 14, 162);
+
+            doc.setFontSize(8.5);
+            doc.setFont('helvetica', 'normal');
+            const splitText = doc.splitTextToSize(
+                "33% native compensatory afforestation along boundary with 2,500 trees/Ha. Continuous online emission monitoring (CEMS) connected to CPCB cloud. High-efficiency particulate collection required.", 180
+            );
+            doc.text(splitText, 14, 170);
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, 270, 196, 270);
+            doc.setFontSize(8);
+            doc.setTextColor(120, 120, 120);
+            doc.text("Generated by Ecoryx Automated GIS Clearance Platform // SIH 2026", 14, 276);
+
+            doc.save(`Ecoryx_EIA_Report_${Date.now()}.pdf`);
+
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.6 },
+                colors: ['#0A2619', '#1E6F4A', '#7AD3A2']
+            });
+        }
+    </script>
+</body>
+</html>
