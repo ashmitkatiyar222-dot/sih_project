@@ -93,13 +93,6 @@ export default function TerrainShowcaseSection() {
               Interactive 3D topography mesh scanner rendering real-time elevation ridges, regulatory buffer boundary envelopes, and spatial hazard markers.
             </p>
           </div>
-
-          <div className="flex items-center gap-2 text-xs font-mono self-start sm:self-auto shrink-0">
-            <span className="px-2.5 py-1 rounded border bg-white/80 border-stone-300 text-stone-700 shadow-xs flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-emerald-700" />
-              Orbit · Tilt · Zoom
-            </span>
-          </div>
         </div>
 
         {/* 3D Showcase Card Container */}
@@ -118,11 +111,10 @@ export default function TerrainShowcaseSection() {
                     <button
                       key={p.key}
                       onClick={() => setSelectedKey(p.key)}
-                      className={`px-3 py-1.5 rounded text-xs font-mono transition-all cursor-pointer border flex items-center gap-1.5 ${
-                        isSelected
+                      className={`px-3 py-1.5 rounded text-xs font-mono transition-all cursor-pointer border flex items-center gap-1.5 ${isSelected
                           ? 'bg-[#284e3a] text-white border-[#284e3a] shadow-xs font-bold'
                           : 'bg-stone-100/80 text-stone-700 border-stone-300 hover:bg-stone-200'
-                      }`}
+                        }`}
                     >
                       <Mountain className="w-3.5 h-3.5" />
                       <span>{p.name}</span>

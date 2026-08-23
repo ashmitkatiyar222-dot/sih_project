@@ -155,9 +155,9 @@ export default function ManualLedgerSection() {
                       key={row.id}
                       onMouseEnter={() => setActiveFocus(row.id)}
                       onClick={() => setActiveFocus(row.id)}
-                      className={`cursor-pointer transition-all duration-300 ${
+                      className={`cursor-pointer transition-all duration-200 ease-out ${
                         isFocused
-                          ? 'bg-red-50/90 shadow-xs border-l-4 border-l-[#a54d42] translate-x-1 sm:translate-x-1.5'
+                          ? 'bg-red-50/90 shadow-2xs border-l-2 border-l-[#a54d42] translate-x-0.5'
                           : 'hover:bg-white/90'
                       }`}
                     >

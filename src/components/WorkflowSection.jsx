@@ -107,6 +107,7 @@ const WORKFLOW_STAGES = [
 
 export default function WorkflowSection() {
   const sectionRef = useRef(null);
+  const dialKnobRef = useRef(null);
 
   const [activeStep, setActiveStep] = useState(0);
   const [hoveredStep, setHoveredStep] = useState(null);
@@ -114,8 +115,7 @@ export default function WorkflowSection() {
   const [completedSteps, setCompletedSteps] = useState([0]);
 
   // Rotator knob angle in degrees
-  const [rotaryAngle, setRotaryAngle] = useState(-45);
-  const lastStepRef = useRef(-1);
+  const lastStepRef = useRef(0);
 
   // Target step is hovered step or active step
   const currentSelected = hoveredStep !== null ? hoveredStep : activeStep;
@@ -124,7 +124,7 @@ export default function WorkflowSection() {
   const colors = curStage.theme;
 
   // =========================================================================
-  // SCROLL-DRIVEN ROTATOR & GAME STAGE REVEAL LOGIC
+  // HIGH-PERFORMANCE SCROLL-DRIVEN ROTATOR (DIRECT DOM TRANSFORM, ZERO JANK)
   // =========================================================================
   useEffect(() => {
     let ticking = false;
@@ -134,7 +134,10 @@ export default function WorkflowSection() {
 
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          if (!sectionRef.current) return;
+          if (!sectionRef.current) {
+            ticking = false;
+            return;
+          }
           const rect = sectionRef.current.getBoundingClientRect();
           const windowHeight = window.innerHeight;
 
@@ -150,22 +153,22 @@ export default function WorkflowSection() {
           const currentOffset = startThreshold - rect.top;
           const progress = Math.max(0, Math.min(1, currentOffset / totalSpan));
 
-          // Smooth dial rotation: -45deg to +135deg
+          // Smooth dial rotation: -45deg to +135deg via direct DOM transform (bypasses React re-render lag)
           const angle = -45 + progress * 180;
-          setRotaryAngle(angle);
+          if (dialKnobRef.current) {
+            dialKnobRef.current.style.transform = `rotate(${angle}deg)`;
+          }
 
-          // Calibrated discrete step selection: L01 (0-0.25), L02 (0.25-0.5), L03 (0.5-0.75), L04 (0.75-1.0)
+          // Discrete step selection: only triggers state update when level actually transitions
           let stepIdx = 0;
           if (progress < 0.25) stepIdx = 0;
           else if (progress < 0.50) stepIdx = 1;
           else if (progress < 0.75) stepIdx = 2;
           else stepIdx = 3;
 
-          setActiveStep(stepIdx);
-
           if (stepIdx !== lastStepRef.current) {
             lastStepRef.current = stepIdx;
-            playDialClickSound();
+            setActiveStep(stepIdx);
           }
 
           ticking = false;
@@ -183,8 +186,12 @@ export default function WorkflowSection() {
   // =========================================================================
   const handleSelectLevel = (idx) => {
     setActiveStep(idx);
+    lastStepRef.current = idx;
     const angles = [-45, 15, 75, 135];
-    setRotaryAngle(angles[idx] || 0);
+    const targetAngle = angles[idx] || 0;
+    if (dialKnobRef.current) {
+      dialKnobRef.current.style.transform = `rotate(${targetAngle}deg)`;
+    }
     playDialClickSound();
   };
 
@@ -201,31 +208,37 @@ export default function WorkflowSection() {
     setIsPlaying(true);
     setCompletedSteps([0]);
     setActiveStep(0);
-    setRotaryAngle(-45);
+    lastStepRef.current = 0;
+    if (dialKnobRef.current) {
+      dialKnobRef.current.style.transform = 'rotate(-45deg)';
+    }
     playDialClickSound();
 
     const timeouts = [];
     timeouts.push(
       setTimeout(() => {
         setActiveStep(1);
+        lastStepRef.current = 1;
         setCompletedSteps([0, 1]);
-        setRotaryAngle(15);
+        if (dialKnobRef.current) dialKnobRef.current.style.transform = 'rotate(15deg)';
         playDialClickSound();
       }, 10000)
     );
     timeouts.push(
       setTimeout(() => {
         setActiveStep(2);
+        lastStepRef.current = 2;
         setCompletedSteps([0, 1, 2]);
-        setRotaryAngle(75);
+        if (dialKnobRef.current) dialKnobRef.current.style.transform = 'rotate(75deg)';
         playDialClickSound();
       }, 20000)
     );
     timeouts.push(
       setTimeout(() => {
         setActiveStep(3);
+        lastStepRef.current = 3;
         setCompletedSteps([0, 1, 2, 3]);
-        setRotaryAngle(135);
+        if (dialKnobRef.current) dialKnobRef.current.style.transform = 'rotate(135deg)';
         playDialClickSound();
       }, 30000)
     );
@@ -335,9 +348,8 @@ export default function WorkflowSection() {
             <button
               onClick={handleRunSpeedrun}
               disabled={isPlaying}
-              className={`btn-neumorphic px-5 py-3 sm:px-6 sm:py-3.5 text-sm sm:text-base font-mono font-bold uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer shadow-md ${
-                isPlaying ? 'opacity-70 scale-98' : 'hover:scale-102 hover:shadow-lg'
-              }`}
+              className={`btn-neumorphic px-5 py-3 sm:px-6 sm:py-3.5 text-sm sm:text-base font-mono font-bold uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer shadow-md ${isPlaying ? 'opacity-70 scale-98' : 'hover:scale-102 hover:shadow-lg'
+                }`}
             >
               <Zap className={`w-5 h-5 ${isPlaying ? 'text-amber-600 animate-spin' : 'text-emerald-800'}`} />
               <span>{isPlaying ? '⚡ Running 40s Simulation...' : '⚡ Run 40s Speedrun'}</span>
@@ -362,9 +374,11 @@ export default function WorkflowSection() {
             >
               {/* Dial Angle Knob */}
               <div
-                className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-b from-[#faf9f5] to-[#ece8de] border border-[#d5cfc2] shadow-[0_4px_10px_rgba(0,0,0,0.15)] flex items-center justify-center transition-transform duration-300 ease-out"
+                ref={dialKnobRef}
+                className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-b from-[#faf9f5] to-[#ece8de] border border-[#d5cfc2] shadow-[0_4px_10px_rgba(0,0,0,0.15)] flex items-center justify-center transition-transform duration-200 ease-out"
                 style={{
-                  transform: `rotate(${rotaryAngle}deg)`,
+                  transform: 'rotate(-45deg)',
+                  willChange: 'transform',
                 }}
               >
                 {/* Pointer Needle */}
@@ -380,11 +394,10 @@ export default function WorkflowSection() {
                 <button
                   key={st.step}
                   onClick={() => handleSelectLevel(i)}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
-                    activeStep === i
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${activeStep === i
                       ? 'bg-emerald-950 text-white shadow-md'
                       : 'bg-white/80 text-stone-700 hover:bg-white border border-stone-200 shadow-2xs'
-                  }`}
+                    }`}
                 >
                   L{st.step}
                 </button>
@@ -433,18 +446,16 @@ export default function WorkflowSection() {
                     onClick={() => handleSelectLevel(idx)}
                     onMouseEnter={() => setHoveredStep(idx)}
                     onMouseLeave={() => setHoveredStep(null)}
-                    className={`flex flex-col items-center group cursor-pointer transition-all duration-300 ${
-                      isCur ? 'scale-105' : 'hover:scale-102'
-                    }`}
+                    className={`flex flex-col items-center group cursor-pointer transition-all duration-300 ${isCur ? 'scale-105' : 'hover:scale-102'
+                      }`}
                   >
                     <div
-                      className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-mono text-xs sm:text-sm font-bold border-2 transition-all duration-500 ${
-                        isCur
+                      className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-mono text-xs sm:text-sm font-bold border-2 transition-all duration-500 ${isCur
                           ? 'bg-emerald-950 text-white border-emerald-400 ring-4 ring-emerald-500/25 shadow-md scale-110'
                           : isPassed
-                          ? 'bg-emerald-800 text-white border-emerald-600 shadow-xs'
-                          : 'bg-white/90 backdrop-blur-sm text-stone-600 border-white/80 hover:border-stone-400 shadow-2xs'
-                      }`}
+                            ? 'bg-emerald-800 text-white border-emerald-600 shadow-xs'
+                            : 'bg-white/90 backdrop-blur-sm text-stone-600 border-white/80 hover:border-stone-400 shadow-2xs'
+                        }`}
                     >
                       {isPassed ? <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : st.step}
                     </div>

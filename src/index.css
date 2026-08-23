@@ -56,6 +56,11 @@ samp,
   font-family: 'Google Sans', 'Mulish', 'Merriweather Sans', sans-serif !important;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   background-color: var(--bg-canvas, #f4f1ea);
   color: var(--text-main, #1a1d1a);
@@ -386,18 +391,18 @@ a:hover .neumorphic-icon-badge,
 @keyframes scroll-reveal-fade-up {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.985);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 @keyframes scroll-reveal-fade-in {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -459,34 +464,29 @@ a:hover .neumorphic-icon-badge,
 /* ========================================================================= */
 /* THEMED / TRANSPARENT LIQUID SCROLLBAR                                     */
 /* ========================================================================= */
-.custom-scrollbar::-webkit-scrollbar,
-.overflow-x-auto::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   height: 5px;
   width: 5px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track,
-.overflow-x-auto::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 9999px;
   margin: 0 4px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb,
-.overflow-x-auto::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(40, 78, 58, 0.28);
   border-radius: 9999px;
   transition: background 0.2s ease;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover,
-.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(40, 78, 58, 0.55);
 }
 
 /* Firefox */
-.custom-scrollbar,
-.overflow-x-auto {
+.custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(40, 78, 58, 0.28) transparent;
 }

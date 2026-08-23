@@ -270,9 +270,6 @@ export default function ConsoleSection({
               }}
             >
               <span className="text-[11px]">Automated environmental compliance check</span>
-              <span className="text-[11px]">
-                Check Time: <strong style={{ color: 'var(--color-primary, #284e3a)' }} className="font-bold">0.38s</strong>
-              </span>
             </div>
           </div>
         </div>
