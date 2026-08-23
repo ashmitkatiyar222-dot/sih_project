@@ -521,7 +521,7 @@ refImages.forEach((img, idx) => {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
   doc.setTextColor(...PRIMARY);
-  doc.text(`[${idx + 1}] docs/reference_images/${img.file}`, margin + 4, y + 5);
+  doc.text(`[${idx + 1}] resources/reference_images/${img.file}`, margin + 4, y + 5);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
@@ -537,7 +537,7 @@ refImages.forEach((img, idx) => {
 });
 
 // Output PDF to file
-const outputDir = path.join(__dirname, '..', 'docs');
+const outputDir = path.join(__dirname, '..', 'documentation');
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }

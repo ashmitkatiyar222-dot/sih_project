@@ -1828,7 +1828,7 @@ endobj
 endobj
 14 0 obj
 <<
-/Length 11440
+/Length 11480
 >>
 stream
 0.5669291338582678 w
@@ -1894,7 +1894,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 737.0081102362204319 Td
-([1] docs/reference_images/01_architecture_diagram.png) Tj
+([1] resources/reference_images/01_architecture_diagram.png) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -1928,7 +1928,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 677.480551181102328 Td
-([2] docs/reference_images/02_blume_meadow_design_ref.jpg) Tj
+([2] resources/reference_images/02_blume_meadow_design_ref.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -1962,7 +1962,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 617.952992125984224 Td
-([3] docs/reference_images/03_lush_meadow_hill_bg.jpg) Tj
+([3] resources/reference_images/03_lush_meadow_hill_bg.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -1996,7 +1996,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 558.42543307086612 Td
-([4] docs/reference_images/04_color_palette_ref_1.jpg) Tj
+([4] resources/reference_images/04_color_palette_ref_1.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -2030,7 +2030,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 498.8978740157479592 Td
-([5] docs/reference_images/05_color_palette_ref_2.jpg) Tj
+([5] resources/reference_images/05_color_palette_ref_2.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -2064,7 +2064,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 439.3703149606298552 Td
-([6] docs/reference_images/06_color_palette_ref_3.jpg) Tj
+([6] resources/reference_images/06_color_palette_ref_3.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -2098,7 +2098,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 379.8427559055117513 Td
-([7] docs/reference_images/07_color_palette_ref_4.jpg) Tj
+([7] resources/reference_images/07_color_palette_ref_4.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -2132,7 +2132,7 @@ BT
 9.7749999999999986 TL
 0.192 0.361 0.282 rg
 51.0236220472441033 320.3151968503935905 Td
-([8] docs/reference_images/08_color_palette_ref_5.jpg) Tj
+([8] resources/reference_images/08_color_palette_ref_5.jpg) Tj
 ET
 BT
 /F2 7.5 Tf
@@ -2320,7 +2320,7 @@ endobj
 29 0 obj
 <<
 /Producer (jsPDF 2.5.2)
-/CreationDate (D:20260823135017+05'30')
+/CreationDate (D:20260823141433+05'30')
 >>
 endobj
 30 0 obj
@@ -2334,8 +2334,8 @@ endobj
 xref
 0 31
 0000000000 65535 f 
-0000076464 00000 n 
-0000078318 00000 n 
+0000076504 00000 n 
+0000078358 00000 n 
 0000000015 00000 n 
 0000000152 00000 n 
 0000012263 00000 n 
@@ -2348,29 +2348,29 @@ xref
 0000059724 00000 n 
 0000064831 00000 n 
 0000064970 00000 n 
-0000076553 00000 n 
-0000076679 00000 n 
-0000076810 00000 n 
-0000076944 00000 n 
-0000077082 00000 n 
-0000077206 00000 n 
-0000077335 00000 n 
-0000077467 00000 n 
-0000077603 00000 n 
-0000077731 00000 n 
-0000077858 00000 n 
-0000077987 00000 n 
-0000078120 00000 n 
-0000078222 00000 n 
-0000078571 00000 n 
-0000078657 00000 n 
+0000076593 00000 n 
+0000076719 00000 n 
+0000076850 00000 n 
+0000076984 00000 n 
+0000077122 00000 n 
+0000077246 00000 n 
+0000077375 00000 n 
+0000077507 00000 n 
+0000077643 00000 n 
+0000077771 00000 n 
+0000077898 00000 n 
+0000078027 00000 n 
+0000078160 00000 n 
+0000078262 00000 n 
+0000078611 00000 n 
+0000078697 00000 n 
 trailer
 <<
 /Size 31
 /Root 30 0 R
 /Info 29 0 R
-/ID [ <A53D141ED70D83378DA12D314CE58598> <A53D141ED70D83378DA12D314CE58598> ]
+/ID [ <32F94C30CE1670C11C4C7C817900AC98> <32F94C30CE1670C11C4C7C817900AC98> ]
 >>
 startxref
-78761
+78801
 %%EOF
