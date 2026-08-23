@@ -3,15 +3,15 @@ import { PRESETS } from './constants/presets';
 import { playDialClickSound } from './utils/audio';
 
 import Header from './components/Header';
-import Hero from './components/Hero';
-import WorkbenchSection from './components/WorkbenchSection';
-import WorkflowSection from './components/WorkflowSection';
-import SectorsSection from './components/SectorsSection';
-import ArchitectureSection from './components/ArchitectureSection';
-import CalculatorSection from './components/CalculatorSection';
+import OverviewPage from './pages/OverviewPage';
+import DashboardPage from './pages/DashboardPage';
 import Footer from './components/Footer';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState(() => {
+    return window.location.hash === '#dashboard' ? 'dashboard' : 'overview';
+  });
+
   const [switchState, setSwitchState] = useState('before');
   const [isAuditing, setIsAuditing] = useState(false);
 
@@ -27,6 +27,24 @@ export default function App() {
 
   const workbenchRef = useRef(null);
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#dashboard') {
+        setCurrentPage('dashboard');
+      } else if (window.location.hash === '#overview' || window.location.hash === '') {
+        setCurrentPage('overview');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+    window.location.hash = page === 'dashboard' ? '#dashboard' : '#overview';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSetSwitchState = (state) => {
     if (switchState !== state) {
       setSwitchState(state);
@@ -39,10 +57,7 @@ export default function App() {
   };
 
   const handleLaunchConsole = () => {
-    handleSetSwitchState('after');
-    if (workbenchRef.current) {
-      workbenchRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    handleNavigate('dashboard');
   };
 
   const handleLoadPreset = (presetKey) => {
@@ -58,7 +73,7 @@ export default function App() {
   };
 
   const handleRunAudit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setIsAuditing(true);
 
     try {
@@ -69,7 +84,7 @@ export default function App() {
           particleCount: 40,
           spread: 50,
           origin: { y: 0.7 },
-          colors: ['#315c48', '#b77927', '#222a25', '#a54d42'],
+          colors: ['#284e3a', '#9c6519', '#1c231f', '#943b32'],
         });
       }, 550);
     } catch {
@@ -78,40 +93,55 @@ export default function App() {
   };
 
   return (
-    <div className="fintech-bg text-stone-800 font-sans antialiased selection:bg-emerald-500 selection:text-white min-h-screen flex flex-col relative overflow-x-hidden">
-      <Header onLaunchConsole={handleLaunchConsole} />
+    <div className="fintech-bg text-stone-800 font-sans antialiased selection:bg-emerald-800 selection:text-white min-h-screen flex flex-col relative overflow-x-hidden">
+      <Header
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+        onLaunchConsole={handleLaunchConsole}
+      />
 
       <main className="flex-1">
-        <Hero
-          onLaunchConsole={handleLaunchConsole}
-          onLoadPreset={handleLoadPreset}
-        />
-
-        <WorkbenchSection
-          ref={workbenchRef}
-          switchState={switchState}
-          onToggleSwitch={handleToggleSwitch}
-          onSelectState={handleSetSwitchState}
-          lat={lat}
-          lng={lng}
-          footprint={footprint}
-          buffer={buffer}
-          category={category}
-          results={results}
-          isAuditing={isAuditing}
-          onLatChange={setLat}
-          onLngChange={setLng}
-          onFootprintChange={setFootprint}
-          onBufferChange={setBuffer}
-          onCategoryChange={setCategory}
-          onLoadPreset={handleLoadPreset}
-          onRunAudit={handleRunAudit}
-        />
-
-        <WorkflowSection />
-        <SectorsSection />
-        <ArchitectureSection />
-        <CalculatorSection />
+        {currentPage === 'overview' ? (
+          <OverviewPage
+            workbenchRef={workbenchRef}
+            switchState={switchState}
+            onToggleSwitch={handleToggleSwitch}
+            onSelectState={handleSetSwitchState}
+            lat={lat}
+            lng={lng}
+            footprint={footprint}
+            buffer={buffer}
+            category={category}
+            results={results}
+            isAuditing={isAuditing}
+            onLatChange={setLat}
+            onLngChange={setLng}
+            onFootprintChange={setFootprint}
+            onBufferChange={setBuffer}
+            onCategoryChange={setCategory}
+            onLoadPreset={handleLoadPreset}
+            onRunAudit={handleRunAudit}
+            onLaunchConsole={handleLaunchConsole}
+          />
+        ) : (
+          <DashboardPage
+            lat={lat}
+            lng={lng}
+            footprint={footprint}
+            buffer={buffer}
+            category={category}
+            results={results}
+            isAuditing={isAuditing}
+            onLatChange={setLat}
+            onLngChange={setLng}
+            onFootprintChange={setFootprint}
+            onBufferChange={setBuffer}
+            onCategoryChange={setCategory}
+            onLoadPreset={handleLoadPreset}
+            onRunAudit={handleRunAudit}
+            onNavigateToOverview={() => handleNavigate('overview')}
+          />
+        )}
       </main>
 
       <Footer />

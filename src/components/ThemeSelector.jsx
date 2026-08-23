@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Palette, Check, Sparkles, ChevronDown } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../utils/context/ThemeContext';
 
 export default function ThemeSelector() {
   const { currentTheme, setTheme, themes } = useTheme();
@@ -24,11 +24,11 @@ export default function ThemeSelector() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border shadow-xs text-xs font-sans font-medium transition-all cursor-pointer hover:bg-[#edeae1] active:scale-98"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border shadow-xs text-xs font-sans font-medium transition-all cursor-pointer hover:bg-[#eae6dc] active:scale-98"
         style={{
-          backgroundColor: 'var(--bg-card, #fbfaf6)',
-          borderColor: 'var(--border-subtle, #d8d4ca)',
-          color: 'var(--text-main, #20231f)',
+          backgroundColor: 'var(--bg-card, #faf9f5)',
+          borderColor: 'var(--border-subtle, #d5cfc2)',
+          color: 'var(--text-main, #1a1d1a)',
         }}
         title="Switch Color Palette"
       >
@@ -47,22 +47,22 @@ export default function ThemeSelector() {
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-1.5 w-72 sm:w-80 rounded-xl border shadow-md p-1.5 z-[999]"
+          className="absolute right-0 mt-1.5 w-72 sm:w-80 rounded-md border shadow-xs p-1.5 z-[999]"
           style={{
-            backgroundColor: 'var(--bg-card, #fbfaf6)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
+            backgroundColor: 'var(--bg-card, #faf9f5)',
+            borderColor: 'var(--border-subtle, #d5cfc2)',
           }}
         >
-          <div className="px-2.5 py-1.5 border-b mb-1 flex items-center justify-between" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted, #73766f)' }}>
-              Color Palettes
+          <div className="px-2.5 py-1.5 border-b mb-1 flex items-center justify-between" style={{ borderColor: 'var(--border-subtle, #d5cfc2)' }}>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted, #5e625a)' }}>
+              Cartographic Palettes
             </span>
             <span
               className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border"
               style={{
-                backgroundColor: 'var(--color-primary-light, #e2ebe5)',
-                color: 'var(--color-primary-text, #244737)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--color-primary-light, #e3ebe5)',
+                color: 'var(--color-primary-text, #1a3527)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
               Live Switch
@@ -79,10 +79,10 @@ export default function ThemeSelector() {
                     setTheme(key);
                     setIsOpen(false);
                   }}
-                  className="w-full text-left p-2 rounded-lg transition-all flex items-center justify-between group cursor-pointer border"
+                  className="w-full text-left p-2 rounded transition-all flex items-center justify-between group cursor-pointer border"
                   style={{
-                    backgroundColor: isSelected ? 'var(--bg-card-subtle, #edeae1)' : 'transparent',
-                    borderColor: isSelected ? 'var(--color-primary, #315c48)' : 'transparent',
+                    backgroundColor: isSelected ? 'var(--bg-card-subtle, #eae6dc)' : 'transparent',
+                    borderColor: isSelected ? 'var(--color-primary, #284e3a)' : 'transparent',
                   }}
                 >
                   <div className="flex items-center gap-2.5">
@@ -90,22 +90,22 @@ export default function ThemeSelector() {
                       {t.previewColors.map((color, i) => (
                         <span
                           key={i}
-                          className="w-3.5 h-3.5 rounded-full border border-white shadow-2xs transition-transform group-hover:scale-110"
+                          className="w-3.5 h-3.5 rounded-full border border-white shadow-xs transition-transform group-hover:scale-105"
                           style={{ backgroundColor: color }}
                         />
                       ))}
                     </div>
                     <div>
-                      <div className="text-xs font-semibold" style={{ color: 'var(--text-main, #20231f)' }}>
+                      <div className="text-xs font-semibold" style={{ color: 'var(--text-main, #1a1d1a)' }}>
                         {t.name}
                       </div>
-                      <div className="text-[10px] line-clamp-1" style={{ color: 'var(--text-muted, #73766f)' }}>
+                      <div className="text-[10px] line-clamp-1" style={{ color: 'var(--text-muted, #5e625a)' }}>
                         {t.description}
                       </div>
                     </div>
                   </div>
                   {isSelected && (
-                    <Check className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--color-primary, #315c48)' }} />
+                    <Check className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--color-primary, #284e3a)' }} />
                   )}
                 </button>
               );

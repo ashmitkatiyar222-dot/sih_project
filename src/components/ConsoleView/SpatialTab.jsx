@@ -31,52 +31,52 @@ export default function SpatialTab() {
   return (
     <div className="space-y-3">
       <div
-        className="text-xs font-sans flex justify-between"
-        style={{ color: 'var(--text-muted, #73766f)' }}
+        className="text-xs sm:text-sm font-mono flex justify-between"
+        style={{ color: 'var(--text-muted, #5e625a)' }}
       >
-        <span>Protected Nature Areas within 10 km Search Radius</span>
-        <span style={{ color: 'var(--color-primary, #315c48)' }} className="font-bold">Map Verified ✓</span>
+        <span>Protected Environmental Areas within Search Distance</span>
+        <span style={{ color: 'var(--color-primary, #284e3a)' }} className="font-bold">Distance Checks Verified ✓</span>
       </div>
       <div
-        className="overflow-x-auto border rounded-2xl shadow-xs"
+        className="overflow-x-auto border rounded shadow-xs"
         style={{
-          borderColor: 'var(--border-subtle, #d8d4ca)',
-          backgroundColor: 'var(--bg-card, #fbfaf6)',
+          borderColor: 'var(--border-subtle, #d5cfc2)',
+          backgroundColor: 'var(--bg-card, #faf9f5)',
         }}
       >
-        <table className="w-full text-left text-xs font-sans">
+        <table className="w-full text-left text-xs sm:text-sm font-sans">
           <thead
-            className="border-b font-semibold"
+            className="border-b font-mono text-xs uppercase font-semibold"
             style={{
-              backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-              color: 'var(--text-main, #20231f)',
+              backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+              borderColor: 'var(--border-subtle, #d5cfc2)',
+              color: 'var(--text-main, #1a1d1a)',
             }}
           >
             <tr>
-              <th className="p-3">Protected Nature Feature</th>
+              <th className="p-3">Protected Environmental Area</th>
               <th className="p-3">Distance From Site</th>
-              <th className="p-3">Safety Rule</th>
-              <th className="p-3">Action Needed</th>
+              <th className="p-3">Applicable Law</th>
+              <th className="p-3">Required Action</th>
             </tr>
           </thead>
           <tbody
-            className="divide-y"
+            className="divide-y text-xs sm:text-sm"
             style={{
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-              color: 'var(--text-muted, #73766f)',
+              borderColor: 'var(--border-subtle, #d5cfc2)',
+              color: 'var(--text-muted, #5e625a)',
             }}
           >
             {SPATIAL_LAYERS.map((row, idx) => (
               <tr
                 key={idx}
-                className="transition-colors hover:opacity-90"
-                style={{ backgroundColor: 'var(--bg-card, #fbfaf6)' }}
+                className="transition-colors hover:bg-[#eae6dc]/40"
+                style={{ backgroundColor: 'var(--bg-card, #faf9f5)' }}
               >
-                <td className="p-3 font-bold" style={{ color: 'var(--text-main, #20231f)' }}>{row.layer}</td>
-                <td className="p-3 font-medium" style={{ color: 'var(--color-secondary, #b77927)' }}>{row.distance}</td>
+                <td className="p-3 font-bold" style={{ color: 'var(--text-main, #1a1d1a)' }}>{row.layer}</td>
+                <td className="p-3 font-mono font-medium" style={{ color: 'var(--color-secondary, #9c6519)' }}>{row.distance}</td>
                 <td className="p-3">{row.standard}</td>
-                <td className="p-3 font-semibold" style={{ color: 'var(--color-primary, #315c48)' }}>{row.mitigation}</td>
+                <td className="p-3 font-medium" style={{ color: 'var(--color-primary, #284e3a)' }}>{row.mitigation}</td>
               </tr>
             ))}
           </tbody>

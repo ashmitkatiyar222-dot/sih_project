@@ -37,27 +37,27 @@ export default function GisMap({ lat, lng, buffer, footprint, onCoordinatesChang
 
         const customIcon = L.divIcon({
           className: 'custom-pin',
-          html: `<div style="background:#10B981; border:3px solid #FFFFFF; border-radius:50%; width:18px; height:18px; box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
-          iconSize: [18, 18],
-          iconAnchor: [9, 9],
+          html: `<div style="background:#284e3a; border:2px solid #faf9f5; border-radius:2px; width:16px; height:16px; box-shadow:0 1px 3px rgba(28,35,31,0.3); display:flex; align-items:center; justify-content:center; color:#fff; font-size:8px; font-weight:bold;">📍</div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
         });
 
         const marker = L.marker([lat, lng], { icon: customIcon, draggable: true }).addTo(map);
         const bufferCircle = L.circle([lat, lng], {
           radius: buffer * 1000,
-          color: '#10B981',
-          weight: 2,
-          fillColor: '#10B981',
-          fillOpacity: 0.12,
+          color: '#284e3a',
+          weight: 1.5,
+          fillColor: '#284e3a',
+          fillOpacity: 0.1,
           dashArray: '4, 6',
         }).addTo(map);
 
         const footprintPolygon = L.circle([lat, lng], {
           radius: Math.sqrt((footprint * 10000) / Math.PI),
-          color: '#EA580C',
-          weight: 2,
-          fillColor: '#EA580C',
-          fillOpacity: 0.28,
+          color: '#9c6519',
+          weight: 1.5,
+          fillColor: '#9c6519',
+          fillOpacity: 0.22,
         }).addTo(map);
 
         marker.on('dragend', () => {
@@ -107,10 +107,23 @@ export default function GisMap({ lat, lng, buffer, footprint, onCoordinatesChang
   }, [lat, lng, buffer, footprint]);
 
   return (
-    <div className="relative w-full h-64 rounded-2xl overflow-hidden border border-stone-200 shadow-inner">
+    <div
+      className="relative w-full h-56 sm:h-60 rounded overflow-hidden border shadow-xs"
+      style={{
+        borderColor: 'var(--border-subtle, #d5cfc2)',
+        backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+      }}
+    >
       <div ref={mapContainerRef} className="w-full h-full z-10" />
-      <div className="absolute top-2.5 left-2.5 z-20 bg-white/95 px-3 py-1.5 rounded-full text-[10px] font-mono text-stone-700 border border-stone-200 pointer-events-none shadow-sm flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block" />
+      <div
+        className="absolute top-2 left-2 z-20 px-2 py-0.5 rounded text-[10px] font-mono border pointer-events-none shadow-xs flex items-center gap-1.5"
+        style={{
+          backgroundColor: 'var(--bg-card, #faf9f5)',
+          borderColor: 'var(--border-subtle, #d5cfc2)',
+          color: 'var(--text-main, #1a1d1a)',
+        }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: 'var(--color-primary, #284e3a)' }} />
         <span>Location: {lat.toFixed(4)}, {lng.toFixed(4)}</span>
       </div>
     </div>

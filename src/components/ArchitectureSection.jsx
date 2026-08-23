@@ -1,248 +1,197 @@
 import React from 'react';
 import { Cpu, Zap, Database, CloudRain, Scale, FileText, ArrowDown, Network, ShieldCheck, Server, Radio, Code2 } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 
 const ARCH_BENCHMARKS = [
-  { metric: 'Throughput Concurrency', value: '1,200 audits/sec', desc: 'Asynchronous non-blocking coroutines running on Uvicorn ASGI workers' },
-  { metric: 'PostGIS Spatial Query P99', value: '180 ms', desc: 'R-Tree indexed ST_DWithin sweeps over 679 national wildlife polygons' },
-  { metric: 'Statutory Vector Search', value: '2,400+ Laws', desc: 'MoEFCC Gazette acts indexed for semantic grounding and EIA compliance' },
-  { metric: 'Cryptographic Integrity', value: 'SHA-256 PDF Seal', desc: 'Tamper-evident hash generated and embedded in final official PDF deliverable' },
+  { metric: 'System Capacity', value: '1,200 checks/sec', desc: 'Handles over a thousand concurrent clearance audits without delay' },
+  { metric: 'Map Search Time', value: '180 ms', desc: 'Instantly searches across all 679 national protected areas' },
+  { metric: 'Environmental Laws', value: '2,400+ Laws', desc: 'Indexed national acts and official rules for instant compliance checks' },
+  { metric: 'Digital Verification', value: 'Digital Seal', desc: 'Tamper-proof digital seal embedded in every generated PDF report' },
 ];
 
 export default function ArchitectureSection() {
   return (
-    <section id="architecture" className="py-10 sm:py-14 border-t" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <section id="architecture" className="py-8 sm:py-12 border-t relative overflow-hidden bg-gradient-to-b from-[#e4f5f1]/70 via-[#f0faf7] to-[#f4f1ea]" style={{ borderColor: 'var(--border-subtle, #d5cfc2)' }}>
+      {/* Ambient Teal/Cyan Glow */}
+      <div className="absolute top-10 right-1/3 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto">
-          <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono mb-2 border"
-            style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-              color: 'var(--text-main, #20231f)',
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
-            />
-            <span>SYSTEM ARCHITECTURE SPECIFICATION</span>
-          </div>
+        <div className="text-left max-w-3xl mb-6 scroll-reveal-header">
           <h2
-            className="text-2xl sm:text-3xl font-serif font-bold tracking-tight mb-1"
-            style={{ color: 'var(--text-main, #20231f)' }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-1.5"
+            style={{ color: 'var(--text-main, #1a1d1a)' }}
           >
-            End-to-End Clearance Engine Pipeline
+            How the System Works Behind the Scenes
           </h2>
-          <p className="text-xs sm:text-sm" style={{ color: 'var(--text-muted, #73766f)' }}>
-            High-throughput asynchronous FastAPI orchestrator querying 4 parallel spatial and atmospheric streams.
+          <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
+            High-speed engine checking 4 parallel environmental and geographic data sources in real-time.
           </p>
         </div>
 
         {/* Technical Pipeline Flow Container */}
-        <div
-          className="rounded-xl border p-5 sm:p-6 space-y-4"
-          style={{
-            backgroundColor: 'var(--bg-card, #fbfaf6)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
-          }}
-        >
+        <Card className="p-4 sm:p-6 space-y-4 scroll-reveal shadow-sm">
           {/* Top Layer: User Input */}
           <div
-            className="p-3.5 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-            style={{
-              backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-            }}
+            className="p-3.5 sm:p-4 rounded border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50/70 border-emerald-200"
           >
             <div>
-              <span className="font-mono text-[10px] uppercase font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
-                Stage 1: User Input Payload
+              <span className="font-mono text-xs uppercase font-bold text-emerald-800">
+                Step 1: Project Details Entered
               </span>
-              <h4 className="font-serif font-bold text-sm" style={{ color: 'var(--text-main, #20231f)' }}>
-                GPS Coordinates, Footprint Area (Ha), Radial Buffer (km), Industry Category
+              <h4 className="font-sans font-bold text-sm sm:text-base mt-0.5 text-emerald-950">
+                Site GPS Coordinates, Land Area (Ha), Search Distance (km), Industry Sector
               </h4>
             </div>
-            <span className="font-mono text-[11px] px-2 py-0.5 rounded border self-start sm:self-center" style={{ backgroundColor: 'var(--bg-card, #fbfaf6)', borderColor: 'var(--border-subtle, #d8d4ca)', color: 'var(--text-muted, #73766f)' }}>
-              POST /api/v1/clearance/audit
+            <span className="font-mono text-xs px-2.5 py-1 rounded border self-start sm:self-center font-bold bg-emerald-100 text-emerald-900 border-emerald-300">
+              Instant Input
             </span>
           </div>
 
           <div className="flex justify-center -my-2">
-            <ArrowDown className="w-4 h-4" style={{ color: 'var(--text-muted, #73766f)' }} />
+            <ArrowDown className="w-4 h-4 text-teal-700" />
           </div>
 
           {/* Middle Orchestrator: FastAPI Engine */}
           <div
-            className="p-3.5 rounded-lg border text-center"
+            className="p-3.5 sm:p-4 rounded border text-center bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 border-teal-700 shadow-sm"
             style={{
-              backgroundColor: 'var(--dark-surface, #222a25)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
               color: '#FFFFFF',
             }}
           >
-            <div className="flex items-center justify-center gap-2 font-mono text-xs font-bold text-[#d1ead7] mb-0.5">
-              <Cpu className="w-4 h-4" style={{ color: 'var(--color-secondary, #b77927)' }} />
-              FastAPI Asynchronous Aggregation Core (&lt; 0.38s Concurrent Ingestion)
+            <div className="flex items-center justify-center gap-2 font-mono text-sm sm:text-base font-bold text-emerald-300 mb-1">
+              <Cpu className="w-4 h-4 text-emerald-400" />
+              Central Processing Engine (&lt; 0.38s Response Time)
             </div>
-            <p className="text-[11px] text-stone-300">
-              Dispatches non-blocking coroutines across 4 dedicated microservices simultaneously
+            <p className="text-xs sm:text-sm text-teal-100/80">
+              Checks 4 key environmental data sources simultaneously in parallel
             </p>
           </div>
 
           <div className="flex justify-center -my-2">
-            <ArrowDown className="w-4 h-4" style={{ color: 'var(--text-muted, #73766f)' }} />
+            <ArrowDown className="w-4 h-4 text-teal-700" />
           </div>
 
-          {/* 4 Parallel Ingestion Streams Grid */}
+          {/* 4 Parallel Ingestion Streams Grid (Multi-Colored) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Stream 1 */}
-            <div
-              className="p-3 rounded-lg border text-left"
-              style={{
-                backgroundColor: 'var(--bg-card, #fbfaf6)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
-              }}
-            >
+            <Card className="p-3.5 sm:p-4 text-left bg-sky-50/70 border-sky-300/80 shadow-xs hover:shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-mono text-[10px] font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
-                  STREAM 1
+                <span className="font-mono text-xs font-bold text-sky-800">
+                  DATA SOURCE 1
                 </span>
-                <CloudRain className="w-3.5 h-3.5" style={{ color: 'var(--color-primary, #315c48)' }} />
+                <CloudRain className="w-4 h-4 text-sky-600" />
               </div>
-              <h5 className="font-semibold text-xs mb-1" style={{ color: 'var(--text-main, #20231f)' }}>
-                Weather &amp; AQI APIs
-              </h5>
-              <p className="text-[11px] leading-tight" style={{ color: 'var(--text-muted, #73766f)' }}>
-                PM2.5, PM10, AQI Index, Temperature, Wind direction &amp; speed
-              </p>
-            </div>
+              <CardTitle className="mb-1 text-sm sm:text-base text-sky-950">
+                Weather &amp; Air Quality
+              </CardTitle>
+              <CardDescription className="text-sky-900/80">
+                Real-time pollution levels, PM2.5, PM10, and air quality index
+              </CardDescription>
+            </Card>
 
             {/* Stream 2 */}
-            <div
-              className="p-3 rounded-lg border text-left"
-              style={{
-                backgroundColor: 'var(--bg-card, #fbfaf6)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
-              }}
-            >
+            <Card className="p-3.5 sm:p-4 text-left bg-amber-50/70 border-amber-300/80 shadow-xs hover:shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-mono text-[10px] font-bold" style={{ color: 'var(--color-secondary, #b77927)' }}>
-                  STREAM 2
+                <span className="font-mono text-xs font-bold text-amber-800">
+                  DATA SOURCE 2
                 </span>
-                <Network className="w-3.5 h-3.5" style={{ color: 'var(--color-secondary, #b77927)' }} />
+                <Network className="w-4 h-4 text-amber-600" />
               </div>
-              <h5 className="font-semibold text-xs mb-1" style={{ color: 'var(--text-main, #20231f)' }}>
-                Overpass (OSM)
-              </h5>
-              <p className="text-[11px] leading-tight" style={{ color: 'var(--text-muted, #73766f)' }}>
-                River drainage channels, water bodies, wetlands, reserve forests
-              </p>
-            </div>
+              <CardTitle className="mb-1 text-sm sm:text-base text-amber-950">
+                Rivers &amp; Water Bodies
+              </CardTitle>
+              <CardDescription className="text-amber-900/80">
+                River channels, lakes, wetlands, and water protection zones
+              </CardDescription>
+            </Card>
 
             {/* Stream 3 */}
-            <div
-              className="p-3 rounded-lg border text-left"
-              style={{
-                backgroundColor: 'var(--bg-card, #fbfaf6)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
-              }}
-            >
+            <Card className="p-3.5 sm:p-4 text-left bg-emerald-50/70 border-emerald-300/80 shadow-xs hover:shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-mono text-[10px] font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
-                  STREAM 3
+                <span className="font-mono text-xs font-bold text-emerald-800">
+                  DATA SOURCE 3
                 </span>
-                <Database className="w-3.5 h-3.5" style={{ color: 'var(--color-primary, #315c48)' }} />
+                <Database className="w-4 h-4 text-emerald-600" />
               </div>
-              <h5 className="font-semibold text-xs mb-1" style={{ color: 'var(--text-main, #20231f)' }}>
-                PostGIS Spatial DB
-              </h5>
-              <p className="text-[11px] leading-tight" style={{ color: 'var(--text-muted, #73766f)' }}>
-                106 National Parks, 573 Sanctuaries, IUCN Red List species
-              </p>
-            </div>
+              <CardTitle className="mb-1 text-sm sm:text-base text-emerald-950">
+                Protected Areas &amp; Forests
+              </CardTitle>
+              <CardDescription className="text-emerald-900/80">
+                106 National Parks, 573 Sanctuaries, and wildlife zones
+              </CardDescription>
+            </Card>
 
             {/* Stream 4 */}
-            <div
-              className="p-3 rounded-lg border text-left"
-              style={{
-                backgroundColor: 'var(--bg-card, #fbfaf6)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
-              }}
-            >
+            <Card className="p-3.5 sm:p-4 text-left bg-indigo-50/70 border-indigo-300/80 shadow-xs hover:shadow-sm">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-mono text-[10px] font-bold" style={{ color: 'var(--color-secondary, #b77927)' }}>
-                  STREAM 4
+                <span className="font-mono text-xs font-bold text-indigo-800">
+                  DATA SOURCE 4
                 </span>
-                <Zap className="w-3.5 h-3.5" style={{ color: 'var(--color-secondary, #b77927)' }} />
+                <Zap className="w-4 h-4 text-indigo-600" />
               </div>
-              <h5 className="font-semibold text-xs mb-1" style={{ color: 'var(--text-main, #20231f)' }}>
-                Demographics
-              </h5>
-              <p className="text-[11px] leading-tight" style={{ color: 'var(--text-muted, #73766f)' }}>
-                Buffer population count &amp; distance to nearest habitation
-              </p>
-            </div>
+              <CardTitle className="mb-1 text-sm sm:text-base text-indigo-950">
+                Local Communities
+              </CardTitle>
+              <CardDescription className="text-indigo-900/80">
+                Distance to nearest towns, villages, and human settlements
+              </CardDescription>
+            </Card>
           </div>
 
           <div className="flex justify-center -my-2">
-            <ArrowDown className="w-4 h-4" style={{ color: 'var(--text-muted, #73766f)' }} />
+            <ArrowDown className="w-4 h-4" style={{ color: 'var(--text-muted, #5e625a)' }} />
           </div>
 
           {/* AI Statutory Cross-Referencing & PDF Report Engine */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div
-              className="p-3.5 rounded-lg border"
+              className="p-3.5 sm:p-4 rounded border"
               style={{
-                backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <Scale className="w-4 h-4" style={{ color: 'var(--color-primary, #315c48)' }} />
-                <span className="font-serif font-bold text-xs" style={{ color: 'var(--text-main, #20231f)' }}>
-                  Gemini API + Regulatory Rulebook
+                <Scale className="w-4 h-4" style={{ color: 'var(--color-primary, #284e3a)' }} />
+                <span className="font-sans font-bold text-sm sm:text-base" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                  Smart Rule &amp; Law Evaluator
                 </span>
               </div>
-              <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-muted, #73766f)' }}>
-                Cross-references 2,400+ digitized EIA Gazette notifications and generates verified EMP mitigation recommendations.
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
+                Matches location against 2,400+ national environmental laws and creates required mitigation actions.
               </p>
             </div>
 
             <div
-              className="p-3.5 rounded-lg border"
+              className="p-3.5 sm:p-4 rounded border"
               style={{
-                backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <FileText className="w-4 h-4" style={{ color: 'var(--color-primary, #315c48)' }} />
-                <span className="font-serif font-bold text-xs" style={{ color: 'var(--text-main, #20231f)' }}>
-                  PDF Report Engine (ReportLab)
+                <FileText className="w-4 h-4" style={{ color: 'var(--color-primary, #284e3a)' }} />
+                <span className="font-sans font-bold text-sm sm:text-base" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                  Official PDF Report Generator
                 </span>
               </div>
-              <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-muted, #73766f)' }}>
-                Synthesizes verified spatial tables, vulnerability radar charts, and digital verification seal into a certified PDF.
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
+                Compiles all map findings, risk charts, and required safety steps into a submission-ready PDF.
               </p>
             </div>
           </div>
-        </div>
+        </Card>
 
-        {/* Engine Performance & Throughput Specifications Grid (Fills empty space) */}
-        <div
-          className="rounded-xl border p-4 sm:p-5"
-          style={{
-            backgroundColor: 'var(--bg-card, #fbfaf6)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
-          }}
-        >
-          <div className="flex items-center justify-between pb-3 mb-3 border-b" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
-            <span className="text-xs font-serif font-bold" style={{ color: 'var(--text-main, #20231f)' }}>
-              Core Engineering Throughput &amp; Reliability SLA
+        {/* Engine Performance & Throughput Specifications Grid */}
+        <Card className="p-4 sm:p-5 scroll-reveal">
+          <div className="flex items-center justify-between pb-2.5 mb-3 border-b" style={{ borderColor: 'var(--border-subtle, #d5cfc2)' }}>
+            <span className="text-sm sm:text-base font-sans font-bold" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+              System Performance &amp; Reliability
             </span>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--color-primary, #315c48)' }}>
-              99.99% Availability
+            <span className="text-xs font-mono font-semibold" style={{ color: 'var(--color-primary, #284e3a)' }}>
+              99.99% Uptime
             </span>
           </div>
 
@@ -250,25 +199,25 @@ export default function ArchitectureSection() {
             {ARCH_BENCHMARKS.map((b, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-lg border"
+                className="p-3 rounded border"
                 style={{
-                  backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-                  borderColor: 'var(--border-subtle, #d8d4ca)',
+                  backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+                  borderColor: 'var(--border-subtle, #d5cfc2)',
                 }}
               >
-                <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+                <div className="text-xs font-mono uppercase" style={{ color: 'var(--text-muted, #5e625a)' }}>
                   {b.metric}
                 </div>
-                <div className="text-base font-mono font-bold mt-0.5" style={{ color: 'var(--color-primary, #315c48)' }}>
+                <div className="text-base sm:text-lg font-mono font-bold mt-0.5" style={{ color: 'var(--color-primary, #284e3a)' }}>
                   {b.value}
                 </div>
-                <p className="text-[11px] mt-1 leading-snug" style={{ color: 'var(--text-muted, #73766f)' }}>
+                <p className="text-xs sm:text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
                   {b.desc}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
     </section>
   );

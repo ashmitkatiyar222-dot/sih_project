@@ -1,197 +1,170 @@
 import React from 'react';
 import { Trees, Droplets, Wind } from 'lucide-react';
 import RadarChart from './RadarChart';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
 
 export default function ScorecardTab({ results, isVisible }) {
   const isHighRisk = results.riskScore > 75;
   const isMediumRisk = results.riskScore > 40;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Verdict Card */}
-      <div
-        className="p-4 rounded-xl border shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-        style={{
-          backgroundColor: 'var(--bg-card, #fbfaf6)',
-          borderColor: 'var(--border-subtle, #d8d4ca)',
-        }}
+      <Card
+        className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5"
       >
         <div>
           <div
-            className="text-[10px] font-mono uppercase tracking-wider mb-1"
-            style={{ color: 'var(--text-muted, #73766f)' }}
+            className="text-xs font-mono uppercase tracking-wider mb-1"
+            style={{ color: 'var(--text-muted, #5e625a)' }}
           >
-            Statutory Clearance Verdict
+            Clearance Verdict
           </div>
-          <div
-            className="text-lg font-serif font-bold"
+          <CardTitle
+            className="text-lg sm:text-xl"
             style={{
               color: isHighRisk
-                ? 'var(--color-red, #a54d42)'
+                ? 'var(--color-red, #943b32)'
                 : isMediumRisk
-                ? 'var(--color-secondary, #b77927)'
-                : 'var(--color-primary, #315c48)',
+                ? 'var(--color-secondary, #9c6519)'
+                : 'var(--color-primary, #284e3a)',
             }}
           >
             {results.verdict}
-          </div>
-          <p className="text-xs mt-0.5 max-w-md" style={{ color: 'var(--text-muted, #73766f)' }}>
+          </CardTitle>
+          <CardDescription className="mt-1 max-w-md">
             {results.verdictDesc}
-          </p>
+          </CardDescription>
         </div>
 
         <div className="text-left sm:text-right shrink-0">
-          <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
-            Sensitivity Index
+          <div className="text-xs font-mono uppercase" style={{ color: 'var(--text-muted, #5e625a)' }}>
+            Environmental Risk Score
           </div>
           <div
-            className="text-2xl font-mono font-bold"
+            className="text-2xl sm:text-3xl font-mono font-bold mt-0.5"
             style={{
               color: isHighRisk
-                ? 'var(--color-red, #a54d42)'
-                : 'var(--color-primary, #315c48)',
+                ? 'var(--color-red, #943b32)'
+                : 'var(--color-primary, #284e3a)',
             }}
           >
             {results.riskScore} / 100
           </div>
           <span
-            className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-mono border uppercase font-bold"
+            className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-mono border uppercase font-bold"
             style={{
               backgroundColor: isHighRisk
-                ? 'var(--color-red-light, #faebe9)'
+                ? 'var(--color-red-light, #fae7e5)'
                 : isMediumRisk
-                ? 'var(--color-secondary-light, #fdf4e8)'
-                : 'var(--color-primary-light, #e2ebe5)',
+                ? 'var(--color-secondary-light, #fbf0dc)'
+                : 'var(--color-primary-light, #e3ebe5)',
               color: isHighRisk
-                ? 'var(--color-red, #a54d42)'
+                ? 'var(--color-red, #943b32)'
                 : isMediumRisk
-                ? 'var(--color-secondary, #b77927)'
-                : 'var(--color-primary, #315c48)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
+                ? 'var(--color-secondary, #9c6519)'
+                : 'var(--color-primary, #284e3a)',
+              borderColor: 'var(--border-subtle, #d5cfc2)',
             }}
           >
-            {isHighRisk ? 'Critical Review' : isMediumRisk ? 'Conditional Clearance' : 'Approved'}
+            {isHighRisk ? 'Needs Review' : isMediumRisk ? 'Conditional Clearance' : 'Approved'}
           </span>
         </div>
-      </div>
+      </Card>
 
       {/* 2-COL DETAILS & RADAR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="space-y-2">
           {/* Sanctuary */}
-          <div
-            className="p-3 rounded-lg border flex items-center justify-between shadow-xs"
-            style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Trees className="w-4 h-4" style={{ color: 'var(--color-primary, #315c48)' }} />
+          <Card className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Trees className="w-4 h-4" style={{ color: 'var(--color-primary, #284e3a)' }} />
               <div>
-                <div className="text-xs font-semibold" style={{ color: 'var(--text-main, #20231f)' }}>
-                  Wildlife Sanctuary Buffer
+                <div className="text-sm font-semibold" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                  Nearby Wildlife Sanctuary
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted, #73766f)' }}>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted, #5e625a)' }}>
                   {results.sanctuary}
                 </div>
               </div>
             </div>
             <span
-              className="text-[10px] font-mono px-1.5 py-0.5 rounded border"
+              className="text-xs font-mono px-2 py-0.5 rounded border uppercase font-semibold"
               style={{
-                backgroundColor: 'var(--color-secondary-light, #fdf4e8)',
-                color: 'var(--color-secondary, #b77927)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--color-secondary-light, #fbf0dc)',
+                color: 'var(--color-secondary, #9c6519)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
-              ESZ Check
+              Checked
             </span>
-          </div>
+          </Card>
 
           {/* Hydrological */}
-          <div
-            className="p-3 rounded-lg border flex items-center justify-between shadow-xs"
-            style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Droplets className="w-4 h-4" style={{ color: 'var(--color-primary, #315c48)' }} />
+          <Card className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Droplets className="w-4 h-4" style={{ color: 'var(--color-primary, #284e3a)' }} />
               <div>
-                <div className="text-xs font-semibold" style={{ color: 'var(--text-main, #20231f)' }}>
-                  Hydrology &amp; Drainage
+                <div className="text-sm font-semibold" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                  Rivers &amp; Water Bodies
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted, #73766f)' }}>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted, #5e625a)' }}>
                   {results.hydro}
                 </div>
               </div>
             </div>
             <span
-              className="text-[10px] font-mono px-1.5 py-0.5 rounded border"
+              className="text-xs font-mono px-2 py-0.5 rounded border uppercase font-semibold"
               style={{
-                backgroundColor: 'var(--color-primary-light, #e2ebe5)',
-                color: 'var(--color-primary, #315c48)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--color-primary-light, #e3ebe5)',
+                color: 'var(--color-primary, #284e3a)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
-              ZLD Valid
+              Checked
             </span>
-          </div>
+          </Card>
 
           {/* Air Quality */}
-          <div
-            className="p-3 rounded-lg border flex items-center justify-between shadow-xs"
-            style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Wind className="w-4 h-4" style={{ color: 'var(--color-secondary, #b77927)' }} />
+          <Card className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Wind className="w-4 h-4" style={{ color: 'var(--color-secondary, #9c6519)' }} />
               <div>
-                <div className="text-xs font-semibold" style={{ color: 'var(--text-main, #20231f)' }}>
-                  Airshed &amp; CAAQMS AQI
+                <div className="text-sm font-semibold" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                  Local Air Quality (AQI)
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted, #73766f)' }}>
+                <div className="text-xs font-mono" style={{ color: 'var(--text-muted, #5e625a)' }}>
                   {results.aqi}
                 </div>
               </div>
             </div>
             <span
-              className="text-[10px] font-mono px-1.5 py-0.5 rounded border"
+              className="text-xs font-mono px-2 py-0.5 rounded border uppercase font-semibold"
               style={{
-                backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-                color: 'var(--text-muted, #73766f)',
-                borderColor: 'var(--border-subtle, #d8d4ca)',
+                backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+                color: 'var(--text-muted, #5e625a)',
+                borderColor: 'var(--border-subtle, #d5cfc2)',
               }}
             >
-              NAAQS
+              Normal
             </span>
-          </div>
+          </Card>
         </div>
 
         {/* Radar Visualizer */}
-        <div
-          className="p-3 rounded-lg border flex flex-col justify-between"
-          style={{
-            backgroundColor: 'var(--bg-card, #fbfaf6)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
-          }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted, #73766f)' }}>
-              Vulnerability Radar (5 Dims)
+        <Card className="p-3 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted, #5e625a)' }}>
+              Environmental Risk Profile
             </span>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--color-primary, #315c48)' }}>
-              PostGIS Ingestion
+            <span className="text-xs font-mono" style={{ color: 'var(--color-primary, #284e3a)' }}>
+              Automated Check
             </span>
           </div>
           <div className="h-44 flex items-center justify-center">
             {isVisible && <RadarChart />}
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

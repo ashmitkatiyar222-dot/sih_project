@@ -19,11 +19,11 @@ export default function RadarChart({ data, isVisible }) {
   useEffect(() => {
     if (!isVisible || !canvasRef.current) return;
 
-    const gridColor = '#E7E5E4';
-    const angleLineColor = '#D6D3D1';
-    const labelColor = '#57534E';
-    const primaryColor = '#059669';
-    const bgColor = 'rgba(16, 185, 129, 0.18)';
+    const gridColor = '#d5cfc2';
+    const angleLineColor = '#bfb9aa';
+    const labelColor = '#5e625a';
+    const primaryColor = '#284e3a';
+    const bgColor = 'rgba(40, 78, 58, 0.15)';
 
     let timer = null;
 
@@ -41,10 +41,10 @@ export default function RadarChart({ data, isVisible }) {
                 data: data || [75, 65, 80, 50, 40],
                 backgroundColor: bgColor,
                 borderColor: primaryColor,
-                borderWidth: 2,
+                borderWidth: 1.5,
                 pointBackgroundColor: primaryColor,
-                pointBorderColor: '#FFFFFF',
-                pointHoverBackgroundColor: '#0284C7',
+                pointBorderColor: '#faf9f5',
+                pointHoverBackgroundColor: '#9c6519',
               },
             ],
           },
@@ -52,7 +52,7 @@ export default function RadarChart({ data, isVisible }) {
             responsive: true,
             maintainAspectRatio: false,
             animation: {
-              duration: 300,
+              duration: 250,
             },
             scales: {
               r: {
@@ -60,7 +60,7 @@ export default function RadarChart({ data, isVisible }) {
                 grid: { color: gridColor },
                 pointLabels: {
                   color: labelColor,
-                  font: { size: 9, family: 'Plus Jakarta Sans', weight: '600' },
+                  font: { size: 9, family: "'Merriweather Sans', 'Mulish', 'Google Sans', sans-serif", weight: '600' },
                 },
                 ticks: { display: false },
               },
@@ -86,7 +86,7 @@ export default function RadarChart({ data, isVisible }) {
   }, [data, isVisible]);
 
   return (
-    <div className="w-full h-40 flex items-center justify-center">
+    <div className="w-full h-36 flex items-center justify-center">
       <canvas ref={canvasRef} />
     </div>
   );

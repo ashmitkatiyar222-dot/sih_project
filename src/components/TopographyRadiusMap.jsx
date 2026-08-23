@@ -52,13 +52,13 @@ export default function TopographyRadiusMap({
         className: 'custom-center-pin',
         html: `
           <div class="relative flex items-center justify-center">
-            <div style="background:#315c48; border:2px solid #fbfaf6; border-radius:50%; width:18px; height:18px; box-shadow:0 2px 4px rgba(32,35,31,0.3); display:flex; align-items:center; justify-content:center; color:#fff; font-size:9px; font-weight:bold;">
+            <div style="background:#284e3a; border:1.5px solid #faf9f5; border-radius:2px; width:16px; height:16px; box-shadow:0 1px 3px rgba(28,35,31,0.3); display:flex; align-items:center; justify-content:center; color:#fff; font-size:8px; font-weight:bold;">
               📍
             </div>
           </div>
         `,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
       });
 
       const marker = L.marker([geoData.lat, geoData.lng], {
@@ -69,9 +69,9 @@ export default function TopographyRadiusMap({
       // Radial Scan Buffer Circle
       const bufferCircle = L.circle([geoData.lat, geoData.lng], {
         radius: bufferRadius * 1000,
-        color: '#315c48',
+        color: '#284e3a',
         weight: 1.5,
-        fillColor: '#315c48',
+        fillColor: '#284e3a',
         fillOpacity: 0.1,
         dashArray: '4, 6',
       }).addTo(map);
@@ -153,30 +153,30 @@ export default function TopographyRadiusMap({
 
       const blipColor =
         blip.severity === 'red'
-          ? '#a54d42'
+          ? '#943b32'
           : blip.severity === 'amber' || blip.severity === 'orange'
-          ? '#b77927'
-          : '#315c48';
+          ? '#9c6519'
+          : '#284e3a';
 
       const blipIcon = L.divIcon({
         className: 'custom-blip-pin',
         html: `
-          <div style="background:${blipColor}; border:1.5px solid #fbfaf6; border-radius:50%; width:14px; height:14px; box-shadow:0 1px 3px rgba(32,35,31,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer;">
-            <div style="background:#fbfaf6; border-radius:50%; width:4px; height:4px;"></div>
+          <div style="background:${blipColor}; border:1px solid #faf9f5; border-radius:2px; width:12px; height:12px; box-shadow:0 1px 2px rgba(28,35,31,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer;">
+            <div style="background:#faf9f5; border-radius:1px; width:3px; height:3px;"></div>
           </div>
         `,
-        iconSize: [14, 14],
-        iconAnchor: [7, 7],
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
       });
 
       const marker = L.marker([blip.lat, blip.lng], { icon: blipIcon }).addTo(map);
 
       marker.bindTooltip(
         `
-        <div style="font-family:'Plus Jakarta Sans', sans-serif; font-size:11px; padding:2px 4px; background:#fbfaf6; color:#20231f; border-radius:6px;">
-          <div style="font-weight:bold; color:#20231f;">${blip.name}</div>
-          <div style="color:#73766f; font-size:10px;">${blip.status}</div>
-          <div style="font-size:10px; color:#315c48; font-weight:bold; margin-top:2px;">${blip.dist} km from site</div>
+        <div style="font-family:'Plus Jakarta Sans', sans-serif; font-size:11px; padding:2px 4px; background:#faf9f5; color:#1a1d1a; border-radius:2px; border:1px solid #d5cfc2;">
+          <div style="font-weight:bold; color:#1a1d1a;">${blip.name}</div>
+          <div style="color:#5e625a; font-size:10px;">${blip.status}</div>
+          <div style="font-size:10px; color:#284e3a; font-weight:bold; margin-top:2px;">${blip.dist} km from site</div>
         </div>
       `,
         { direction: 'top', offset: [0, -6] }
@@ -191,52 +191,52 @@ export default function TopographyRadiusMap({
 
   return (
     <div
-      className="relative w-full rounded-xl overflow-hidden border"
+      className="relative w-full rounded overflow-hidden border"
       style={{
-        borderColor: 'var(--border-subtle, #d8d4ca)',
-        backgroundColor: 'var(--bg-card-subtle, #edeae1)',
+        borderColor: 'var(--border-subtle, #d5cfc2)',
+        backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
       }}
     >
       {/* Top Map Controls Overlay */}
       <div
-        className="absolute top-2.5 left-2.5 z-[400] flex items-center gap-1.5 p-1 rounded-lg border text-xs shadow-xs"
+        className="absolute top-2 left-2 z-[400] flex items-center gap-1 p-0.5 px-1 rounded border text-xs shadow-xs"
         style={{
-          backgroundColor: 'var(--bg-card, #fbfaf6)',
-          borderColor: 'var(--border-subtle, #d8d4ca)',
+          backgroundColor: 'var(--bg-card, #faf9f5)',
+          borderColor: 'var(--border-subtle, #d5cfc2)',
         }}
       >
-        <div className="flex items-center gap-1 px-1.5 font-medium" style={{ color: 'var(--text-main, #20231f)' }}>
-          <Mountain className="w-3.5 h-3.5" style={{ color: 'var(--color-primary, #315c48)' }} />
-          <span className="hidden sm:inline text-[11px]">{geoData.terrainTitle || 'GIS Scanner'}</span>
+        <div className="flex items-center gap-1 px-1 font-medium" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+          <Mountain className="w-3.5 h-3.5" style={{ color: 'var(--color-primary, #284e3a)' }} />
+          <span className="hidden sm:inline text-[10px] font-mono uppercase">{geoData.terrainTitle || 'GIS Scanner'}</span>
         </div>
-        <div className="w-px h-3.5" style={{ backgroundColor: 'var(--border-subtle, #d8d4ca)' }} />
-        <div className="flex items-center gap-1">
+        <div className="w-px h-3" style={{ backgroundColor: 'var(--border-subtle, #d5cfc2)' }} />
+        <div className="flex items-center gap-0.5">
           <button
             onClick={() => setMapStyle('terrain')}
-            className="px-2 py-0.5 rounded text-[10px] font-semibold transition-all cursor-pointer"
+            className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold transition-all cursor-pointer uppercase"
             style={{
-              backgroundColor: mapStyle === 'terrain' ? 'var(--color-primary, #315c48)' : 'transparent',
-              color: mapStyle === 'terrain' ? '#FFFFFF' : 'var(--text-muted, #73766f)',
+              backgroundColor: mapStyle === 'terrain' ? 'var(--color-primary, #284e3a)' : 'transparent',
+              color: mapStyle === 'terrain' ? '#FFFFFF' : 'var(--text-muted, #5e625a)',
             }}
           >
             Topo
           </button>
           <button
             onClick={() => setMapStyle('satellite')}
-            className="px-2 py-0.5 rounded text-[10px] font-semibold transition-all cursor-pointer"
+            className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold transition-all cursor-pointer uppercase"
             style={{
-              backgroundColor: mapStyle === 'satellite' ? 'var(--color-primary, #315c48)' : 'transparent',
-              color: mapStyle === 'satellite' ? '#FFFFFF' : 'var(--text-muted, #73766f)',
+              backgroundColor: mapStyle === 'satellite' ? 'var(--color-primary, #284e3a)' : 'transparent',
+              color: mapStyle === 'satellite' ? '#FFFFFF' : 'var(--text-muted, #5e625a)',
             }}
           >
             Satellite
           </button>
           <button
             onClick={() => setMapStyle('streets')}
-            className="px-2 py-0.5 rounded text-[10px] font-semibold transition-all cursor-pointer"
+            className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold transition-all cursor-pointer uppercase"
             style={{
-              backgroundColor: mapStyle === 'streets' ? 'var(--color-primary, #315c48)' : 'transparent',
-              color: mapStyle === 'streets' ? '#FFFFFF' : 'var(--text-muted, #73766f)',
+              backgroundColor: mapStyle === 'streets' ? 'var(--color-primary, #284e3a)' : 'transparent',
+              color: mapStyle === 'streets' ? '#FFFFFF' : 'var(--text-muted, #5e625a)',
             }}
           >
             Vector
@@ -246,13 +246,13 @@ export default function TopographyRadiusMap({
 
       {/* Elevation Badge Bottom Left */}
       <div
-        className="absolute bottom-2.5 left-2.5 z-[400] text-white text-[10px] font-mono px-2 py-0.5 rounded border flex items-center gap-1 shadow-xs"
+        className="absolute bottom-2 left-2 z-[400] text-white text-[10px] font-mono px-1.5 py-0.5 rounded border flex items-center gap-1 shadow-xs"
         style={{
-          backgroundColor: 'var(--dark-surface, #222a25)',
-          borderColor: 'var(--border-subtle, #d8d4ca)',
+          backgroundColor: 'var(--dark-surface, #1c231f)',
+          borderColor: 'var(--border-subtle, #d5cfc2)',
         }}
       >
-        <Compass className="w-3 h-3" style={{ color: 'var(--color-secondary, #b77927)' }} />
+        <Compass className="w-3 h-3" style={{ color: 'var(--color-secondary, #9c6519)' }} />
         <span>{geoData.elevation || 'Elevation: Dynamic Topo Index'}</span>
       </div>
 

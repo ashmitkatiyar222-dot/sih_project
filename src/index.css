@@ -3,95 +3,120 @@
 @tailwind utilities;
 
 /* ========================================================================= */
-/* CSS VARIABLES / REFINED EDITORIAL DESIGN SYSTEM                           */
+/* CSS VARIABLES / GOVTECH CLEARANCE DESIGN SYSTEM                          */
 /* ========================================================================= */
 :root {
-  --color-primary: #315c48;          /* Primary Muted Forest Green */
-  --color-primary-hover: #244737;    /* Primary Dark */
-  --color-primary-light: #e2ebe5;    /* Soft Forest Tint */
-  --color-primary-text: #244737;     /* Dark Forest Text */
+  --color-primary: #284e3a;          /* Deep Pine Green */
+  --color-primary-hover: #1e3b2c;    /* Deep Forest */
+  --color-primary-light: #e3ebe5;    /* Archival Forest Tint */
+  --color-primary-text: #1a3527;     /* Dark Forest Text */
 
-  --dark-surface: #222a25;           /* Charcoal Dark Surface */
+  --dark-surface: #1c231f;           /* Deep Charcoal Slate */
 
-  --color-secondary: #b77927;        /* Amber for charging states */
-  --color-secondary-hover: #9a631d;  /* Deep Amber */
-  --color-secondary-light: #fdf4e8;  /* Amber Tint */
-  --color-secondary-text: #784a0d;   /* Dark Amber Text */
+  --color-secondary: #9c6519;        /* Ochre Amber */
+  --color-secondary-hover: #7e5011;  /* Deep Ochre */
+  --color-secondary-light: #fbf0dc;  /* Warm Ochre Tint */
+  --color-secondary-text: #6b430b;   /* Dark Ochre Text */
 
-  --color-accent: #b77927;           /* Amber */
-  --color-accent-hover: #9a631d;
-  --color-accent-light: #fdf4e8;
+  --color-accent: #9c6519;
+  --color-accent-hover: #7e5011;
+  --color-accent-light: #fbf0dc;
 
-  --color-red: #a54d42;              /* Red */
-  --color-red-light: #faebe9;
+  --color-red: #943b32;              /* Madder Oxide Red */
+  --color-red-light: #fae7e5;        /* Madder Tint */
 
-  --color-nature: #315c48;
-  --color-nature-light: #e2ebe5;
+  --color-nature: #284e3a;
+  --color-nature-light: #e3ebe5;
 
-  --bg-canvas: #f3f1eb;              /* Background: Warm Off-White */
-  --bg-card: #fbfaf6;                /* Surface: Warm Light Surface */
-  --bg-card-subtle: #edeae1;         /* Subtle Surface */
-  --border-subtle: #d8d4ca;          /* Borders: Warm Border */
-  --border-strong: #315c48;          /* Forest Accent Border */
-  --text-main: #20231f;              /* Text: Charcoal */
-  --text-muted: #73766f;             /* Muted Text */
+  --bg-canvas: #f4f1ea;              /* Background: Archival Warm Off-White */
+  --bg-card: #faf9f5;                /* Surface: Archival Paper */
+  --bg-card-subtle: #eae6dc;         /* Subtle Document Grey/Tan */
+  --border-subtle: #d5cfc2;          /* Hairline Border */
+  --border-strong: #284e3a;          /* Strong Forest Border */
+  --text-main: #1a1d1a;              /* Text: Carbon Charcoal */
+  --text-muted: #5e625a;             /* Regulatory Annotation Muted */
+}
+
+*,
+::before,
+::after,
+html,
+body,
+button,
+input,
+optgroup,
+select,
+textarea,
+pre,
+code,
+kbd,
+samp,
+.font-mono,
+[class*="font-mono"] {
+  font-family: 'Google Sans', 'Mulish', 'Merriweather Sans', sans-serif !important;
 }
 
 body {
-  background-color: var(--bg-canvas, #f3f1eb);
-  color: var(--text-main, #20231f);
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-canvas, #f4f1ea);
+  color: var(--text-main, #1a1d1a);
+  font-size: clamp(0.8125rem, 0.8rem + 0.15vw, 0.9375rem);
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .fintech-bg {
-  background-color: var(--bg-canvas, #f3f1eb) !important;
+  background-color: var(--bg-canvas, #f4f1ea) !important;
 }
 
 /* ========================================================================= */
-/* CRISP ROTARY COMPARISON DIAL                                              */
+/* CALIBRATED MECHANICAL ROTARY DOCKET SWITCH                               */
 /* ========================================================================= */
 .rotary-switch-wrapper {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px;
-  background: var(--bg-card, #fbfaf6);
-  border: 1px solid var(--border-subtle, #d8d4ca);
-  border-radius: 9999px;
-  box-shadow: 0 1px 2px rgba(32, 35, 31, 0.04);
+  padding: 6px 10px;
+  background: var(--bg-card, #faf9f5);
+  border: 1.5px solid var(--border-subtle, #d5cfc2);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(28, 35, 31, 0.05);
   user-select: none;
 }
 
 .rotary-socket {
   position: relative;
-  width: 72px;
-  height: 72px;
-  margin: 0 10px;
+  width: 76px;
+  height: 76px;
+  margin: 0 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: var(--bg-card-subtle, #edeae1);
-  border: 1px solid var(--border-subtle, #d8d4ca);
+  border-radius: 6px;
+  background: var(--bg-card-subtle, #eae6dc);
+  border: 1.5px solid var(--border-subtle, #d5cfc2);
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 3px rgba(28, 35, 31, 0.08);
 }
 
 .rotary-socket:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+}
+
+.rotary-socket:hover {
+  border-color: var(--color-primary, #284e3a);
 }
 
 .rotary-knob {
   position: relative;
-  width: 54px;
-  height: 54px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: #fbfaf6;
-  border: 1px solid var(--border-subtle, #d8d4ca);
-  box-shadow: 0 2px 4px rgba(32, 35, 31, 0.06);
+  background: #faf9f5;
+  border: 1.5px solid var(--border-subtle, #d5cfc2);
+  box-shadow: 0 2px 6px rgba(28, 35, 31, 0.12);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   align-items: center;
@@ -100,22 +125,22 @@ body {
 
 .rotary-pointer {
   position: absolute;
-  top: -7px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 9px solid var(--color-primary, #315c48);
+  border-bottom: 10px solid var(--color-primary, #284e3a);
 }
 
 .rotary-center-cap {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--bg-card-subtle, #edeae1);
-  border: 1px solid var(--border-subtle, #d8d4ca);
+  background: var(--bg-card-subtle, #eae6dc);
+  border: 1.5px solid var(--border-subtle, #d5cfc2);
 }
 
 .rotary-knob.state-before {
@@ -130,38 +155,43 @@ body {
 /* SWITCH LABEL BUTTONS                                                      */
 /* ========================================================================= */
 .switch-label-btn {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 9999px;
+  padding: 8px 16px;
+  border-radius: 6px;
   transition: all 0.15s ease-out;
   cursor: pointer;
   border: 1px solid transparent;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  font-family: 'Merriweather Sans', 'Mulish', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .switch-label-btn.active-before {
-  background: var(--bg-card-subtle, #edeae1);
-  color: var(--text-main, #20231f);
-  border-color: var(--border-subtle, #d8d4ca);
+  background: var(--bg-card-subtle, #eae6dc);
+  color: var(--text-main, #1a1d1a);
+  border-color: var(--border-subtle, #d5cfc2);
+  box-shadow: 0 1px 3px rgba(28, 35, 31, 0.06);
 }
 
 .switch-label-btn.active-after {
-  background: var(--color-primary, #315c48);
+  background: var(--color-primary, #284e3a);
   color: #FFFFFF;
-  border-color: var(--color-primary-hover, #244737);
+  border-color: var(--color-primary-hover, #1e3b2c);
+  box-shadow: 0 1px 3px rgba(40, 78, 58, 0.2);
 }
 
 .switch-label-btn.inactive {
-  color: var(--text-muted, #73766f);
+  color: var(--text-muted, #5e625a);
   background: transparent;
 }
 
 .switch-label-btn.inactive:hover {
-  color: var(--text-main, #20231f);
-  background: var(--bg-card-subtle, #edeae1);
+  color: var(--text-main, #1a1d1a);
+  background: var(--bg-card-subtle, #eae6dc);
 }
 
 /* ========================================================================= */
@@ -177,9 +207,9 @@ body {
 .view-panel {
   grid-area: 1 / 1;
   transition:
-    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    visibility 0.25s;
+    opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.22s;
   width: 100%;
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -188,14 +218,14 @@ body {
 
 .view-panel-before.panel-hidden {
   opacity: 0;
-  transform: translate3d(-20px, 0, 0);
+  transform: translate3d(-12px, 0, 0);
   visibility: hidden;
   pointer-events: none;
 }
 
 .view-panel-after.panel-hidden {
   opacity: 0;
-  transform: translate3d(20px, 0, 0);
+  transform: translate3d(12px, 0, 0);
   visibility: hidden;
   pointer-events: none;
 }
@@ -211,19 +241,252 @@ body {
 /* LEAFLET MAP OVERRIDES                                                     */
 /* ========================================================================= */
 .leaflet-container {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
-  background-color: var(--bg-canvas, #f3f1eb) !important;
-  border-radius: 10px;
+  font-family: 'Google Sans', 'Mulish', 'Merriweather Sans', sans-serif !important;
+  background-color: var(--bg-canvas, #f4f1ea) !important;
+  border-radius: 4px;
 }
 
 .leaflet-popup-content-wrapper {
-  background: var(--dark-surface, #222a25) !important;
+  background: var(--dark-surface, #1c231f) !important;
   color: #FFFFFF !important;
-  border: 1px solid var(--color-primary, #315c48) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(34, 42, 37, 0.2) !important;
+  border: 1px solid var(--border-subtle, #d5cfc2) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 6px rgba(28, 35, 31, 0.2) !important;
 }
 
 .leaflet-popup-tip {
-  background: var(--dark-surface, #222a25) !important;
+  background: var(--dark-surface, #1c231f) !important;
+}
+
+/* ========================================================================= */
+/* NEUMORPHIC BUTTON UTILITIES                                               */
+/* ========================================================================= */
+.btn-neumorphic {
+  background: linear-gradient(145deg, #e4eaf2 0%, #d4dbe6 100%);
+  box-shadow: 
+    inset 1px 1px 1.5px rgba(255, 255, 255, 0.85),
+    inset -1px -1px 1.5px rgba(152, 161, 174, 0.35),
+    6px 6px 14px rgba(152, 161, 174, 0.45),
+    -6px -6px 14px rgba(255, 255, 255, 0.95);
+  color: #1a2e24;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.btn-neumorphic:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 1px 1px 1.5px rgba(255, 255, 255, 0.9),
+    inset -1px -1px 1.5px rgba(152, 161, 174, 0.3),
+    8px 8px 18px rgba(152, 161, 174, 0.55),
+    -8px -8px 18px rgba(255, 255, 255, 1);
+  background: linear-gradient(145deg, #edf2fa 0%, #dbe2ed 100%);
+}
+
+.btn-neumorphic:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 4px 4px 8px rgba(152, 161, 174, 0.75),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.95);
+  background: linear-gradient(145deg, #d3dae5 0%, #dfe5f0 100%);
+}
+
+.neumorphic-icon-badge {
+  background-color: #dde3ec;
+  box-shadow: 
+    inset 1px 1px 1px rgba(154, 163, 177, 0.35),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.70),
+    inset 5px 5px 28px rgba(154, 163, 177, 0.74),
+    inset -5px -5px 28px rgba(252, 253, 253, 0.86);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #1e3b2b;
+}
+
+.group:hover .neumorphic-icon-badge,
+a:hover .neumorphic-icon-badge,
+.neumorphic-icon-badge:hover {
+  box-shadow: 
+    inset 5px 5px 14px rgba(154, 163, 177, 0.74),
+    inset -5px -5px 14px rgba(252, 253, 253, 0.86);
+  transform: scale(0.96);
+}
+
+/* ========================================================================= */
+/* GLASSMORPHIC BUTTON & REPORT UTILITIES                                    */
+/* ========================================================================= */
+.btn-glassmorphic-pill {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.85);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #1a1d1a;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-glassmorphic-pill:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.btn-glassmorphic-pill.active {
+  background: rgba(28, 35, 31, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 16px -3px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.btn-glass-report {
+  background-color: rgba(28, 35, 31, 0.92);
+  background-image: radial-gradient(ellipse 130% 90% at 50% 0%, rgba(255, 255, 255, 0.140) 0%, rgba(255, 255, 255, 0.060) 45%, rgba(255, 255, 255, 0.010) 100%);
+  box-shadow: 0 19px 54px -14px rgba(0, 0, 0, 0.305), 0 1px 2px rgba(0, 0, 0, 0.152), inset 0 0 8px rgba(255, 255, 255, 0.115), inset 0 4px 8px -4px rgba(0, 0, 0, 0.060), inset 0 -1px 1px rgba(255, 255, 255, 0.180), inset 0 1px 1px rgba(255, 255, 255, 0.820), inset 0 0 0 1px rgba(255, 255, 255, 0.480);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #FFFFFF;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.btn-glass-report:hover {
+  transform: translateY(-1.5px);
+  background-color: rgba(28, 35, 31, 0.98);
+  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.18), inset 0 4px 8px -4px rgba(0, 0, 0, 0.06), inset 0 -1px 1px rgba(255, 255, 255, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+}
+
+.btn-glass-report:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+/* ========================================================================= */
+/* CSS SCROLL-DRIVEN ANIMATIONS (https://design.dev/guides/scroll-timeline/) */
+/* ========================================================================= */
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes scroll-reveal-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scroll-reveal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary, #284e3a);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 60;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: scroll-progress auto linear;
+    animation-timeline: scroll();
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: scroll-reveal-fade-up auto cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 28%;
+  }
+
+  .scroll-reveal-card {
+    animation: scroll-reveal-fade-up auto cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 30%;
+  }
+
+  .scroll-reveal-header {
+    animation: scroll-reveal-fade-in auto ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar,
+  .scroll-reveal,
+  .scroll-reveal-card,
+  .scroll-reveal-header {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================================================= */
+/* THEMED / TRANSPARENT LIQUID SCROLLBAR                                     */
+/* ========================================================================= */
+.custom-scrollbar::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+  margin: 0 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: rgba(40, 78, 58, 0.28);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(40, 78, 58, 0.55);
+}
+
+/* Firefox */
+.custom-scrollbar,
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(40, 78, 58, 0.28) transparent;
 }

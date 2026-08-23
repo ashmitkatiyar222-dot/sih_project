@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, Clock, MapPin, DollarSign, ArrowRight, XCircle, FileSpreadsheet, ShieldAlert, Ban } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 
 const AUDIT_DISCREPANCIES = [
   {
@@ -27,25 +28,21 @@ const AUDIT_DISCREPANCIES = [
     risk: 'Severe capital blockage and infrastructure commissioning delays',
   },
 ];
-
 const HISTORIC_CASE_STUDIES = [
   {
     title: 'Aravalli Quartzite Quarry Corridor',
     location: 'Rajasthan · 4.2 km from Sariska ESZ',
     manualOutcome: '7 Month Approval Delay · ₹42L Consultant Fees · Stayed by NGT due to buffer discrepancy',
-    ecoryxVerdict: 'Instant 0.38s Conditional Flagging with automated Wildlife Board clearance checklist',
   },
   {
     title: 'Western Ghats Hydroelectric Penstock',
     location: 'Kerala/Karnataka · 2.1 km from Wayanad Tiger Reserve',
     manualOutcome: '11 Month Submergence Review · Incomplete elephant corridor mapping',
-    ecoryxVerdict: 'Instant 0.38s Critical Review Verdict & Schedule-I Species Migration Protocol generated',
   },
   {
     title: 'NCR Yamuna Chemical Park Expansion',
     location: 'Uttar Pradesh · 1.4 km from River Basin',
     manualOutcome: '5 Month Stoppage · GRAP Airshed Non-Attainment violation penalty',
-    ecoryxVerdict: 'Instant 0.38s Zero Liquid Discharge (ZLD) Mandate & Air Filter EMP attached',
   },
 ];
 
@@ -73,7 +70,7 @@ export default function BeforeEcoryxView({ isActive, onSwitchToAfter }) {
               <span>TRADITIONAL MANUAL WORKFLOW LEDGER</span>
             </div>
             <h3
-              className="text-lg sm:text-xl font-serif font-bold tracking-tight"
+              className="text-lg sm:text-xl font-serif font-bold tracking-tight text-left"
               style={{ color: 'var(--text-main, #20231f)' }}
             >
               Manual Paper Screening Friction &amp; Audit Discrepancies
@@ -144,84 +141,101 @@ export default function BeforeEcoryxView({ isActive, onSwitchToAfter }) {
         </div>
 
         {/* Historic Case Studies Comparison */}
-        <div className="space-y-2">
-          <div className="text-[10px] font-mono uppercase font-bold tracking-wider" style={{ color: 'var(--text-muted, #73766f)' }}>
-            State-Level Audit Impact Comparison (Real Benchmark Scenarios):
+        <div className="space-y-2.5 text-left">
+          <div className="text-xs font-mono uppercase font-bold tracking-wider" style={{ color: 'var(--text-muted, #5e625a)' }}>
+            Real-World Project Examples &amp; Time Saved:
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {HISTORIC_CASE_STUDIES.map((cs, i) => (
-              <div
+              <Card
                 key={i}
-                className="p-3 rounded-lg border flex flex-col justify-between"
+                className="p-3.5 sm:p-4 flex flex-col justify-between gap-3 text-left shadow-xs border transition-all duration-200 hover:shadow-sm"
                 style={{
-                  backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-                  borderColor: 'var(--border-subtle, #d8d4ca)',
+                  backgroundColor: 'var(--bg-card, #faf9f5)',
+                  borderColor: 'var(--border-subtle, #d5cfc2)',
                 }}
               >
-                <div>
-                  <div className="font-serif font-bold text-xs" style={{ color: 'var(--text-main, #20231f)' }}>
-                    {cs.title}
+                <div className="space-y-2">
+                  <div>
+                    <CardTitle className="text-sm sm:text-[15px] font-bold tracking-tight" style={{ color: 'var(--text-main, #1a1d1a)' }}>
+                      {cs.title}
+                    </CardTitle>
+                    <div className="text-[11px] sm:text-xs font-mono mt-0.5" style={{ color: 'var(--text-muted, #5e625a)' }}>
+                      {cs.location}
+                    </div>
                   </div>
-                  <div className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
-                    {cs.location}
-                  </div>
-                  <div className="mt-2 text-[11px] p-1.5 rounded border" style={{ backgroundColor: 'var(--color-red-light, #faebe9)', color: 'var(--color-red, #a54d42)', borderColor: 'var(--border-subtle, #d8d4ca)' }}>
-                    <strong>Manual:</strong> {cs.manualOutcome}
+
+                  {/* Manual Outcome Box */}
+                  <div
+                    className="p-2.5 rounded border text-xs leading-relaxed space-y-1"
+                    style={{
+                      backgroundColor: 'var(--color-red-light, #fae7e5)',
+                      borderColor: 'rgba(148, 59, 50, 0.25)',
+                    }}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[10px] font-mono uppercase font-bold text-white tracking-wider"
+                        style={{ backgroundColor: 'var(--color-red, #943b32)' }}
+                      >
+                        Manual Delay
+                      </span>
+                    </div>
+                    <p className="text-xs leading-relaxed font-sans" style={{ color: 'var(--color-red, #943b32)' }}>
+                      {cs.manualOutcome}
+                    </p>
                   </div>
                 </div>
-                <div className="mt-2 text-[11px] p-1.5 rounded border" style={{ backgroundColor: 'var(--color-primary-light, #e2ebe5)', color: 'var(--color-primary-text, #244737)', borderColor: 'var(--border-subtle, #d8d4ca)' }}>
-                  <strong>Ecoryx:</strong> {cs.ecoryxVerdict}
-                </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
 
         {/* Bottom Key Metric Summary */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x rounded-lg border p-3"
+          className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x rounded border p-3"
           style={{
-            backgroundColor: 'var(--bg-card-subtle, #edeae1)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
+            backgroundColor: 'var(--bg-card-subtle, #eae6dc)',
+            borderColor: 'var(--border-subtle, #d5cfc2)',
           }}
         >
-          <div className="p-2 sm:px-3 text-left">
-            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+          <div className="p-2.5 sm:px-4 text-left">
+            <div className="text-xs font-mono uppercase" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Average Clearance Time Lost
             </div>
-            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-red, #a54d42)' }}>
+            <div className="text-xl sm:text-2xl font-mono font-bold mt-1" style={{ color: 'var(--color-red, #943b32)' }}>
               4 to 6 Months
             </div>
-            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+            <p className="text-xs sm:text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Per major civil or highway infrastructure corridor
             </p>
           </div>
 
-          <div className="p-2 sm:px-3 text-left">
-            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+          <div className="p-2.5 sm:px-4 text-left">
+            <div className="text-xs font-mono uppercase" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Consultant Expense Leak
             </div>
-            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-secondary, #b77927)' }}>
+            <div className="text-xl sm:text-2xl font-mono font-bold mt-1" style={{ color: 'var(--color-secondary, #9c6519)' }}>
               ₹45 Lakhs+
             </div>
-            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+            <p className="text-xs sm:text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Wasted on routine distance and zoning certifications
             </p>
           </div>
 
-          <div className="p-2 sm:px-3 text-left">
-            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+          <div className="p-2.5 sm:px-4 text-left">
+            <div className="text-xs font-mono uppercase" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Survey Measurement Error
             </div>
-            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-red, #a54d42)' }}>
+            <div className="text-xl sm:text-2xl font-mono font-bold mt-1" style={{ color: 'var(--color-red, #943b32)' }}>
               55% Discrepancy
             </div>
-            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+            <p className="text-xs sm:text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-muted, #5e625a)' }}>
               Between physical sketches and actual satellite ESZ borders
             </p>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

@@ -17,16 +17,16 @@ export default function AuditForm({
   onSubmit,
 }) {
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-3.5">
       {/* Coordinate Inputs */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label
             htmlFor="input-lat"
-            className="block text-xs font-sans font-semibold mb-1"
-            style={{ color: 'var(--text-muted, #73766f)' }}
+            className="block text-xs font-mono font-medium mb-1"
+            style={{ color: 'var(--text-muted, #5e625a)' }}
           >
-            Latitude (GPS)
+            Latitude
           </label>
           <input
             id="input-lat"
@@ -35,21 +35,21 @@ export default function AuditForm({
             value={lat}
             onChange={(e) => onLatChange(parseFloat(e.target.value) || 0)}
             required
-            className="w-full border rounded-xl px-3 py-2 text-sm font-mono focus:outline-none shadow-xs transition-all"
+            className="w-full border rounded px-3 py-2 text-xs sm:text-sm font-mono focus:outline-none shadow-xs transition-all"
             style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-              color: 'var(--text-main, #20231f)',
+              backgroundColor: 'var(--bg-card, #faf9f5)',
+              borderColor: 'var(--border-subtle, #d5cfc2)',
+              color: 'var(--text-main, #1a1d1a)',
             }}
           />
         </div>
         <div>
           <label
             htmlFor="input-lng"
-            className="block text-xs font-sans font-semibold mb-1"
-            style={{ color: 'var(--text-muted, #73766f)' }}
+            className="block text-xs font-mono font-medium mb-1"
+            style={{ color: 'var(--text-muted, #5e625a)' }}
           >
-            Longitude (GPS)
+            Longitude
           </label>
           <input
             id="input-lng"
@@ -58,11 +58,11 @@ export default function AuditForm({
             value={lng}
             onChange={(e) => onLngChange(parseFloat(e.target.value) || 0)}
             required
-            className="w-full border rounded-xl px-3 py-2 text-sm font-mono focus:outline-none shadow-xs transition-all"
+            className="w-full border rounded px-3 py-2 text-xs sm:text-sm font-mono focus:outline-none shadow-xs transition-all"
             style={{
-              backgroundColor: 'var(--bg-card, #fbfaf6)',
-              borderColor: 'var(--border-subtle, #d8d4ca)',
-              color: 'var(--text-main, #20231f)',
+              backgroundColor: 'var(--bg-card, #faf9f5)',
+              borderColor: 'var(--border-subtle, #d5cfc2)',
+              color: 'var(--text-main, #1a1d1a)',
             }}
           />
         </div>
@@ -72,10 +72,10 @@ export default function AuditForm({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-sans font-semibold" style={{ color: 'var(--text-muted, #73766f)' }}>
-              Project Area
+            <label className="text-xs font-mono font-medium" style={{ color: 'var(--text-muted, #5e625a)' }}>
+              Project Land Area
             </label>
-            <span className="text-xs font-mono font-bold" style={{ color: 'var(--color-secondary, #b77927)' }}>
+            <span className="text-xs sm:text-sm font-mono font-bold" style={{ color: 'var(--color-secondary, #9c6519)' }}>
               {footprint} Ha
             </span>
           </div>
@@ -86,15 +86,15 @@ export default function AuditForm({
             value={footprint}
             onChange={(e) => onFootprintChange(parseInt(e.target.value, 10))}
             className="w-full h-1.5 rounded appearance-none cursor-pointer"
-            style={{ accentColor: 'var(--color-secondary, #b77927)', backgroundColor: 'var(--border-subtle, #d8d4ca)' }}
+            style={{ accentColor: 'var(--color-secondary, #9c6519)', backgroundColor: 'var(--border-subtle, #d5cfc2)' }}
           />
         </div>
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-sans font-semibold" style={{ color: 'var(--text-muted, #73766f)' }}>
-              Search Radius
+            <label className="text-xs font-mono font-medium" style={{ color: 'var(--text-muted, #5e625a)' }}>
+              Search Distance
             </label>
-            <span className="text-xs font-mono font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
+            <span className="text-xs sm:text-sm font-mono font-bold" style={{ color: 'var(--color-primary, #284e3a)' }}>
               {buffer} km
             </span>
           </div>
@@ -105,7 +105,7 @@ export default function AuditForm({
             value={buffer}
             onChange={(e) => onBufferChange(parseInt(e.target.value, 10))}
             className="w-full h-1.5 rounded appearance-none cursor-pointer"
-            style={{ accentColor: 'var(--color-primary, #315c48)', backgroundColor: 'var(--border-subtle, #d8d4ca)' }}
+            style={{ accentColor: 'var(--color-primary, #284e3a)', backgroundColor: 'var(--border-subtle, #d5cfc2)' }}
           />
         </div>
       </div>
@@ -114,24 +114,24 @@ export default function AuditForm({
       <div>
         <label
           htmlFor="input-category"
-          className="block text-xs font-sans font-semibold mb-1"
-          style={{ color: 'var(--text-muted, #73766f)' }}
+          className="block text-xs font-mono font-medium mb-1"
+          style={{ color: 'var(--text-muted, #5e625a)' }}
         >
-          Project Industry / Type
+          Industry Sector
         </label>
         <select
           id="input-category"
           value={category}
           onChange={(e) => onCategoryChange(e.target.value)}
-          className="w-full border rounded-xl px-3 py-2 text-xs font-medium focus:outline-none shadow-xs cursor-pointer"
+          className="w-full border rounded px-3 py-2 text-xs sm:text-sm font-mono focus:outline-none shadow-xs cursor-pointer"
           style={{
-            backgroundColor: 'var(--bg-card, #fbfaf6)',
-            borderColor: 'var(--border-subtle, #d8d4ca)',
-            color: 'var(--text-main, #20231f)',
+            backgroundColor: 'var(--bg-card, #faf9f5)',
+            borderColor: 'var(--border-subtle, #d5cfc2)',
+            color: 'var(--text-main, #1a1d1a)',
           }}
         >
           {CATEGORIES.map((cat) => (
-            <option key={cat.value} value={cat.value} style={{ backgroundColor: 'var(--bg-card, #fbfaf6)', color: 'var(--text-main, #20231f)' }}>
+            <option key={cat.value} value={cat.value} style={{ backgroundColor: 'var(--bg-card, #faf9f5)', color: 'var(--text-main, #1a1d1a)' }}>
               {cat.label}
             </option>
           ))}
@@ -142,18 +142,18 @@ export default function AuditForm({
       <button
         type="submit"
         disabled={isAuditing}
-        className="w-full py-3.5 rounded-full text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer disabled:opacity-80 hover:opacity-90"
-        style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
+        className="w-full py-2.5 rounded text-white font-mono uppercase font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer disabled:opacity-80 hover:opacity-90"
+        style={{ backgroundColor: 'var(--color-primary, #284e3a)' }}
       >
         {isAuditing ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin text-white" />
-            <span>Scanning Nearby Nature & Forests...</span>
+            <span>Checking Environmental Data...</span>
           </>
         ) : (
           <>
             <Play className="w-4 h-4 fill-current text-white" />
-            <span>Run Instant Safety Check</span>
+            <span>Check Environmental Clearance</span>
           </>
         )}
       </button>

@@ -3,9 +3,9 @@ import { History, Sparkles } from 'lucide-react';
 
 export default function RotarySwitch({ switchState, onToggle, onSelectState }) {
   return (
-    <div className="flex justify-center mb-10">
+    <div className="flex justify-start sm:justify-center w-full">
       <div className="rotary-switch-wrapper">
-        {/* Left Pill: Old Way */}
+        {/* Left Button: Old Manual Workflow */}
         <button
           type="button"
           onClick={() => onSelectState('before')}
@@ -13,10 +13,10 @@ export default function RotarySwitch({ switchState, onToggle, onSelectState }) {
           aria-label="Show Old Manual Paperwork Process"
         >
           <History className="w-4 h-4" />
-          <span>Old Way (Manual Paperwork)</span>
+          <span>Manual Paperwork Ledger</span>
         </button>
 
-        {/* Central Skeuomorphic Rotary Dial Socket */}
+        {/* Central Calibrated Rotary Dial Socket */}
         <div
           className="rotary-socket"
           onClick={onToggle}
@@ -33,12 +33,12 @@ export default function RotarySwitch({ switchState, onToggle, onSelectState }) {
           <div className={`rotary-knob state-${switchState}`}>
             {/* Top Needle Notch */}
             <div className="rotary-pointer" />
-            {/* Center Metallic Cap */}
+            {/* Center Cap */}
             <div className="rotary-center-cap" />
           </div>
         </div>
 
-        {/* Right Pill: New Way */}
+        {/* Right Button: Instant AI Clearance */}
         <button
           type="button"
           onClick={() => onSelectState('after')}
@@ -46,7 +46,7 @@ export default function RotarySwitch({ switchState, onToggle, onSelectState }) {
           aria-label="Launch Instant Ecoryx Simulator"
         >
           <Sparkles className="w-4 h-4" />
-          <span>New Way (Instant Ecoryx)</span>
+          <span>Ecoryx AI Clearance Console</span>
         </button>
       </div>
     </div>
