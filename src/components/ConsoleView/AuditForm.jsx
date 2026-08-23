@@ -21,7 +21,11 @@ export default function AuditForm({
       {/* Coordinate Inputs */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="input-lat" className="block text-xs font-sans font-semibold text-stone-600 mb-1">
+          <label
+            htmlFor="input-lat"
+            className="block text-xs font-sans font-semibold mb-1"
+            style={{ color: 'var(--text-muted, #73766f)' }}
+          >
             Latitude (GPS)
           </label>
           <input
@@ -31,11 +35,20 @@ export default function AuditForm({
             value={lat}
             onChange={(e) => onLatChange(parseFloat(e.target.value) || 0)}
             required
-            className="w-full bg-white border border-stone-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 rounded-xl px-3 py-2 text-sm font-mono text-stone-800 focus:outline-none shadow-sm"
+            className="w-full border rounded-xl px-3 py-2 text-sm font-mono focus:outline-none shadow-xs transition-all"
+            style={{
+              backgroundColor: 'var(--bg-card, #fbfaf6)',
+              borderColor: 'var(--border-subtle, #d8d4ca)',
+              color: 'var(--text-main, #20231f)',
+            }}
           />
         </div>
         <div>
-          <label htmlFor="input-lng" className="block text-xs font-sans font-semibold text-stone-600 mb-1">
+          <label
+            htmlFor="input-lng"
+            className="block text-xs font-sans font-semibold mb-1"
+            style={{ color: 'var(--text-muted, #73766f)' }}
+          >
             Longitude (GPS)
           </label>
           <input
@@ -45,7 +58,12 @@ export default function AuditForm({
             value={lng}
             onChange={(e) => onLngChange(parseFloat(e.target.value) || 0)}
             required
-            className="w-full bg-white border border-stone-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 rounded-xl px-3 py-2 text-sm font-mono text-stone-800 focus:outline-none shadow-sm"
+            className="w-full border rounded-xl px-3 py-2 text-sm font-mono focus:outline-none shadow-xs transition-all"
+            style={{
+              backgroundColor: 'var(--bg-card, #fbfaf6)',
+              borderColor: 'var(--border-subtle, #d8d4ca)',
+              color: 'var(--text-main, #20231f)',
+            }}
           />
         </div>
       </div>
@@ -54,8 +72,12 @@ export default function AuditForm({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-sans font-semibold text-stone-600">Project Area</label>
-            <span className="text-xs font-mono font-bold text-orange-600">{footprint} Ha</span>
+            <label className="text-xs font-sans font-semibold" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Project Area
+            </label>
+            <span className="text-xs font-mono font-bold" style={{ color: 'var(--color-secondary, #b77927)' }}>
+              {footprint} Ha
+            </span>
           </div>
           <input
             type="range"
@@ -63,13 +85,18 @@ export default function AuditForm({
             max="250"
             value={footprint}
             onChange={(e) => onFootprintChange(parseInt(e.target.value, 10))}
-            className="w-full h-1.5 bg-stone-200 rounded appearance-none cursor-pointer accent-orange-500"
+            className="w-full h-1.5 rounded appearance-none cursor-pointer"
+            style={{ accentColor: 'var(--color-secondary, #b77927)', backgroundColor: 'var(--border-subtle, #d8d4ca)' }}
           />
         </div>
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-sans font-semibold text-stone-600">Search Radius</label>
-            <span className="text-xs font-mono font-bold text-emerald-600">{buffer} km</span>
+            <label className="text-xs font-sans font-semibold" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Search Radius
+            </label>
+            <span className="text-xs font-mono font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
+              {buffer} km
+            </span>
           </div>
           <input
             type="range"
@@ -77,24 +104,34 @@ export default function AuditForm({
             max="25"
             value={buffer}
             onChange={(e) => onBufferChange(parseInt(e.target.value, 10))}
-            className="w-full h-1.5 bg-stone-200 rounded appearance-none cursor-pointer accent-emerald-600"
+            className="w-full h-1.5 rounded appearance-none cursor-pointer"
+            style={{ accentColor: 'var(--color-primary, #315c48)', backgroundColor: 'var(--border-subtle, #d8d4ca)' }}
           />
         </div>
       </div>
 
       {/* Industry Sector */}
       <div>
-        <label htmlFor="input-category" className="block text-xs font-sans font-semibold text-stone-600 mb-1">
+        <label
+          htmlFor="input-category"
+          className="block text-xs font-sans font-semibold mb-1"
+          style={{ color: 'var(--text-muted, #73766f)' }}
+        >
           Project Industry / Type
         </label>
         <select
           id="input-category"
           value={category}
           onChange={(e) => onCategoryChange(e.target.value)}
-          className="w-full bg-white border border-stone-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 rounded-xl px-3 py-2 text-xs font-medium text-stone-800 focus:outline-none shadow-sm cursor-pointer"
+          className="w-full border rounded-xl px-3 py-2 text-xs font-medium focus:outline-none shadow-xs cursor-pointer"
+          style={{
+            backgroundColor: 'var(--bg-card, #fbfaf6)',
+            borderColor: 'var(--border-subtle, #d8d4ca)',
+            color: 'var(--text-main, #20231f)',
+          }}
         >
           {CATEGORIES.map((cat) => (
-            <option key={cat.value} value={cat.value} className="bg-white text-stone-800">
+            <option key={cat.value} value={cat.value} style={{ backgroundColor: 'var(--bg-card, #fbfaf6)', color: 'var(--text-main, #20231f)' }}>
               {cat.label}
             </option>
           ))}
@@ -105,7 +142,8 @@ export default function AuditForm({
       <button
         type="submit"
         disabled={isAuditing}
-        className="w-full py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-sm active:scale-98 cursor-pointer disabled:opacity-80"
+        className="w-full py-3.5 rounded-full text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer disabled:opacity-80 hover:opacity-90"
+        style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
       >
         {isAuditing ? (
           <>

@@ -3,47 +3,81 @@
 @tailwind utilities;
 
 /* ========================================================================= */
-/* PAGE BACKGROUND                                                           */
+/* CSS VARIABLES / REFINED EDITORIAL DESIGN SYSTEM                           */
 /* ========================================================================= */
+:root {
+  --color-primary: #315c48;          /* Primary Muted Forest Green */
+  --color-primary-hover: #244737;    /* Primary Dark */
+  --color-primary-light: #e2ebe5;    /* Soft Forest Tint */
+  --color-primary-text: #244737;     /* Dark Forest Text */
+
+  --dark-surface: #222a25;           /* Charcoal Dark Surface */
+
+  --color-secondary: #b77927;        /* Amber for charging states */
+  --color-secondary-hover: #9a631d;  /* Deep Amber */
+  --color-secondary-light: #fdf4e8;  /* Amber Tint */
+  --color-secondary-text: #784a0d;   /* Dark Amber Text */
+
+  --color-accent: #b77927;           /* Amber */
+  --color-accent-hover: #9a631d;
+  --color-accent-light: #fdf4e8;
+
+  --color-red: #a54d42;              /* Red */
+  --color-red-light: #faebe9;
+
+  --color-nature: #315c48;
+  --color-nature-light: #e2ebe5;
+
+  --bg-canvas: #f3f1eb;              /* Background: Warm Off-White */
+  --bg-card: #fbfaf6;                /* Surface: Warm Light Surface */
+  --bg-card-subtle: #edeae1;         /* Subtle Surface */
+  --border-subtle: #d8d4ca;          /* Borders: Warm Border */
+  --border-strong: #315c48;          /* Forest Accent Border */
+  --text-main: #20231f;              /* Text: Charcoal */
+  --text-muted: #73766f;             /* Muted Text */
+}
+
+body {
+  background-color: var(--bg-canvas, #f3f1eb);
+  color: var(--text-main, #20231f);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .fintech-bg {
-  background-color: #F5F4F0;
-}
-
-.fintech-hero-glow {
-  background-color: transparent;
+  background-color: var(--bg-canvas, #f3f1eb) !important;
 }
 
 /* ========================================================================= */
-/* ROTARY DIAL                                                               */
+/* CRISP ROTARY COMPARISON DIAL                                              */
 /* ========================================================================= */
 .rotary-switch-wrapper {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 14px;
-  background: #EDECE8;
-  border: 1px solid #DCD9D3;
+  padding: 6px 12px;
+  background: var(--bg-card, #fbfaf6);
+  border: 1px solid var(--border-subtle, #d8d4ca);
   border-radius: 9999px;
-  box-shadow: 0 2px 6px rgba(41, 37, 36, 0.06);
+  box-shadow: 0 1px 2px rgba(32, 35, 31, 0.04);
   user-select: none;
 }
 
 .rotary-socket {
   position: relative;
-  width: 86px;
-  height: 86px;
-  margin: 0 14px;
+  width: 72px;
+  height: 72px;
+  margin: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #DCD9D3;
-  box-shadow:
-    inset 0 2px 5px rgba(41, 37, 36, 0.12),
-    0 1px 2px rgba(255, 255, 255, 0.7);
+  background: var(--bg-card-subtle, #edeae1);
+  border: 1px solid var(--border-subtle, #d8d4ca);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.3s ease;
+  transition: transform 0.15s ease;
 }
 
 .rotary-socket:active {
@@ -52,93 +86,82 @@
 
 .rotary-knob {
   position: relative;
-  width: 66px;
-  height: 66px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #FAFAF8 0%, #EDECE8 100%);
-  box-shadow:
-    0 4px 10px rgba(41, 37, 36, 0.1),
-    0 1px 3px rgba(41, 37, 36, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.9),
-    inset 0 -1px 2px rgba(41, 37, 36, 0.05);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #fbfaf6;
+  border: 1px solid var(--border-subtle, #d8d4ca);
+  box-shadow: 0 2px 4px rgba(32, 35, 31, 0.06);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #CBC8C1;
 }
 
 .rotary-pointer {
   position: absolute;
-  top: -9px;
+  top: -7px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 11px solid #059669;
-  filter: drop-shadow(0 1px 2px rgba(5, 150, 105, 0.35));
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid var(--color-primary, #315c48);
 }
 
 .rotary-center-cap {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #EDECE8;
-  box-shadow:
-    inset 0 1px 2px rgba(41, 37, 36, 0.08),
-    0 1px 1px rgba(255, 255, 255, 0.8);
-  border: 1px solid #DCD9D3;
+  background: var(--bg-card-subtle, #edeae1);
+  border: 1px solid var(--border-subtle, #d8d4ca);
 }
 
 .rotary-knob.state-before {
-  transform: rotate(-28deg);
+  transform: rotate(-26deg);
 }
 
 .rotary-knob.state-after {
-  transform: rotate(28deg);
+  transform: rotate(26deg);
 }
 
 /* ========================================================================= */
 /* SWITCH LABEL BUTTONS                                                      */
 /* ========================================================================= */
 .switch-label-btn {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 8px 18px;
+  padding: 6px 14px;
   border-radius: 9999px;
-  transition: all 0.2s ease-out;
+  transition: all 0.15s ease-out;
   cursor: pointer;
   border: 1px solid transparent;
-  font-family: 'Inter', sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .switch-label-btn.active-before {
-  background: #FAFAF8;
-  color: #292524;
-  box-shadow: 0 2px 6px rgba(41, 37, 36, 0.07);
-  border-color: #DCD9D3;
+  background: var(--bg-card-subtle, #edeae1);
+  color: var(--text-main, #20231f);
+  border-color: var(--border-subtle, #d8d4ca);
 }
 
 .switch-label-btn.active-after {
-  background: #059669;
+  background: var(--color-primary, #315c48);
   color: #FFFFFF;
-  box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
-  border-color: #047857;
+  border-color: var(--color-primary-hover, #244737);
 }
 
 .switch-label-btn.inactive {
-  color: #78716C;
+  color: var(--text-muted, #73766f);
   background: transparent;
 }
 
 .switch-label-btn.inactive:hover {
-  color: #292524;
-  background: #E7E5E0;
+  color: var(--text-main, #20231f);
+  background: var(--bg-card-subtle, #edeae1);
 }
 
 /* ========================================================================= */
@@ -154,9 +177,9 @@
 .view-panel {
   grid-area: 1 / 1;
   transition:
-    opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-    visibility 0.32s;
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s;
   width: 100%;
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -165,14 +188,14 @@
 
 .view-panel-before.panel-hidden {
   opacity: 0;
-  transform: translate3d(-40px, 0, 0);
+  transform: translate3d(-20px, 0, 0);
   visibility: hidden;
   pointer-events: none;
 }
 
 .view-panel-after.panel-hidden {
   opacity: 0;
-  transform: translate3d(40px, 0, 0);
+  transform: translate3d(20px, 0, 0);
   visibility: hidden;
   pointer-events: none;
 }
@@ -188,79 +211,19 @@
 /* LEAFLET MAP OVERRIDES                                                     */
 /* ========================================================================= */
 .leaflet-container {
-  font-family: 'Inter', sans-serif !important;
-  background-color: #F5F4F0 !important;
-  border-radius: 0.75rem;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  background-color: var(--bg-canvas, #f3f1eb) !important;
+  border-radius: 10px;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #292524 !important;
+  background: var(--dark-surface, #222a25) !important;
   color: #FFFFFF !important;
-  border: 1px solid #059669 !important;
-  border-radius: 0.5rem !important;
-  box-shadow: 0 10px 20px -3px rgba(41, 37, 36, 0.3) !important;
+  border: 1px solid var(--color-primary, #315c48) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(34, 42, 37, 0.2) !important;
 }
 
 .leaflet-popup-tip {
-  background: #292524 !important;
-}
-
-/* ========================================================================= */
-/* SUBTLE PULSE                                                              */
-/* ========================================================================= */
-/* ========================================================================= */
-/* RADAR SCANNER ANIMATIONS                                                  */
-/* ========================================================================= */
-@keyframes radarSweep {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-radar-sweep {
-  animation: radarSweep 4s linear infinite;
-  transform-origin: center center;
-}
-
-@keyframes pingSlow {
-  0% {
-    transform: scale(0.95);
-    opacity: 0.8;
-  }
-
-  70% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
-
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
-}
-
-.animate-ping-slow {
-  animation: pingSlow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes subtlePulse {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.85;
-    transform: scale(1.03);
-  }
-}
-
-.pulse-subtle {
-  animation: subtlePulse 3s infinite ease-in-out;
+  background: var(--dark-surface, #222a25) !important;
 }

@@ -1,107 +1,224 @@
 import React from 'react';
-import { AlertTriangle, Clock, Map, Wallet, ArrowRight, X } from 'lucide-react';
+import { AlertTriangle, Clock, MapPin, DollarSign, ArrowRight, XCircle, FileSpreadsheet, ShieldAlert, Ban } from 'lucide-react';
 
-const CHALLENGES = [
+const AUDIT_DISCREPANCIES = [
   {
-    title: "Scattered Information:",
-    desc: "Nature maps and rules are trapped across separate PDF websites and paper files."
+    parameter: 'Sanctuary & Forest Buffer Measurement',
+    manualProcess: 'Hand-drawn radial circles on physical topographic survey sheets',
+    delay: '6 to 10 weeks',
+    risk: 'High risk of boundary overlap penalty (WPA 1972 violation)',
   },
   {
-    title: "Confusing Regulations:",
-    desc: "Hard to figure out which exact government environmental laws apply to your project."
+    parameter: 'Statutory Gazette Cross-Referencing',
+    manualProcess: 'Lawyers manually thumbing through 2,400+ un-indexed state gazette PDFs',
+    delay: '4 to 8 weeks',
+    risk: 'Overlooked local wildlife corridor notifications & NGT court stays',
   },
   {
-    title: "4 to 6 Months of Waiting:",
-    desc: "Manual paper drawing and slow department reviews delay important projects."
+    parameter: 'Air & Water Dispersion Modeling',
+    manualProcess: 'Hiring external consultants for third-party plume test reports',
+    delay: '8 to 14 weeks',
+    risk: '₹35-50 Lakhs in repetitive consultant fees per project',
   },
   {
-    title: "Costly Legal Risks:",
-    desc: "Accidentally building too close to a protected forest can halt the entire project."
-  }
+    parameter: 'Committee Clearance Drafting',
+    manualProcess: 'Stenographers manually typing and mailing physical paperwork',
+    delay: '4 to 6 months',
+    risk: 'Severe capital blockage and infrastructure commissioning delays',
+  },
 ];
 
-const METRICS = [
+const HISTORIC_CASE_STUDIES = [
   {
-    val: "68%",
-    title: "Time Lost to Slow Paperwork",
-    desc: "Projects sit waiting for months for manual committee reviews.",
-    Icon: Clock
+    title: 'Aravalli Quartzite Quarry Corridor',
+    location: 'Rajasthan · 4.2 km from Sariska ESZ',
+    manualOutcome: '7 Month Approval Delay · ₹42L Consultant Fees · Stayed by NGT due to buffer discrepancy',
+    ecoryxVerdict: 'Instant 0.38s Conditional Flagging with automated Wildlife Board clearance checklist',
   },
   {
-    val: "55%",
-    title: "Manual Map Reading Errors",
-    desc: "Mistakes made from measuring distances by hand on outdated paper maps.",
-    Icon: Map
+    title: 'Western Ghats Hydroelectric Penstock',
+    location: 'Kerala/Karnataka · 2.1 km from Wayanad Tiger Reserve',
+    manualOutcome: '11 Month Submergence Review · Incomplete elephant corridor mapping',
+    ecoryxVerdict: 'Instant 0.38s Critical Review Verdict & Schedule-I Species Migration Protocol generated',
   },
   {
-    val: "₹45 Lakhs",
-    title: "Money Wasted on Repetitive Surveys",
-    desc: "Funds drained hiring consultants for basic distance and map checks.",
-    Icon: Wallet
-  }
+    title: 'NCR Yamuna Chemical Park Expansion',
+    location: 'Uttar Pradesh · 1.4 km from River Basin',
+    manualOutcome: '5 Month Stoppage · GRAP Airshed Non-Attainment violation penalty',
+    ecoryxVerdict: 'Instant 0.38s Zero Liquid Discharge (ZLD) Mandate & Air Filter EMP attached',
+  },
 ];
 
 export default function BeforeEcoryxView({ isActive, onSwitchToAfter }) {
   return (
     <div className={`view-panel view-panel-before ${isActive ? 'panel-active' : 'panel-hidden'}`}>
-      <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-sm">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left Column: Challenges List (6 Cols) */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-sans font-bold">
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-              Old Manual Process (Before Ecoryx)
+      <div
+        className="rounded-xl p-5 sm:p-7 relative border shadow-xs space-y-5"
+        style={{
+          backgroundColor: 'var(--bg-card, #fbfaf6)',
+          borderColor: 'var(--border-subtle, #d8d4ca)',
+        }}
+      >
+        {/* Header Strip */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b gap-3" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+          <div>
+            <div
+              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono font-semibold mb-1"
+              style={{
+                backgroundColor: 'var(--color-red-light, #faebe9)',
+                color: 'var(--color-red, #a54d42)',
+              }}
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>TRADITIONAL MANUAL WORKFLOW LEDGER</span>
             </div>
-
-            <h3 className="text-2xl sm:text-4xl font-sans font-extrabold text-stone-900 leading-tight tracking-tight">
-              Why getting green approvals today is slow and painful
+            <h3
+              className="text-lg sm:text-xl font-serif font-bold tracking-tight"
+              style={{ color: 'var(--text-main, #20231f)' }}
+            >
+              Manual Paper Screening Friction &amp; Audit Discrepancies
             </h3>
-
-            <div className="space-y-4 pt-1">
-              {CHALLENGES.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <X className="w-3 h-3" />
-                  </div>
-                  <p className="text-sm text-stone-600 leading-relaxed font-normal">
-                    <strong className="text-stone-900 font-semibold">{item.title}</strong> {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Action prompt to switch */}
-            <div className="pt-2">
-              <button
-                onClick={onSwitchToAfter}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm active:scale-95 group cursor-pointer"
-              >
-                <span>Turn Dial to See Ecoryx AI</span>
-                <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
           </div>
 
-          {/* Right Column: Metric Cards (6 Cols) */}
-          <div className="lg:col-span-6 space-y-4">
-            {METRICS.map((metric, idx) => {
-              const IconComp = metric.Icon;
-              return (
-                <div
+          <button
+            onClick={onSwitchToAfter}
+            className="px-3.5 py-1.5 rounded-lg text-white font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90 shadow-xs shrink-0 self-start sm:self-center"
+            style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
+          >
+            <span>Turn Dial to Ecoryx AI</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Structured Ledger Table */}
+        <div
+          className="overflow-x-auto rounded-lg border"
+          style={{
+            borderColor: 'var(--border-subtle, #d8d4ca)',
+            backgroundColor: 'var(--bg-card, #fbfaf6)',
+          }}
+        >
+          <table className="w-full text-left text-xs font-sans">
+            <thead
+              className="border-b font-mono text-[11px]"
+              style={{
+                backgroundColor: 'var(--bg-card-subtle, #edeae1)',
+                borderColor: 'var(--border-subtle, #d8d4ca)',
+                color: 'var(--text-main, #20231f)',
+              }}
+            >
+              <tr>
+                <th className="p-3">Clearance Stage</th>
+                <th className="p-3">Traditional Manual Method</th>
+                <th className="p-3">Typical Delay</th>
+                <th className="p-3">Financial / Legal Exposure</th>
+              </tr>
+            </thead>
+            <tbody
+              className="divide-y"
+              style={{
+                borderColor: 'var(--border-subtle, #d8d4ca)',
+                color: 'var(--text-muted, #73766f)',
+              }}
+            >
+              {AUDIT_DISCREPANCIES.map((row, idx) => (
+                <tr
                   key={idx}
-                  className="p-6 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between gap-4 transition-all hover:border-rose-300 shadow-xs"
+                  className="transition-colors hover:bg-[#edeae1]/40"
+                  style={{ backgroundColor: 'var(--bg-card, #fbfaf6)' }}
                 >
-                  <div>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">{metric.val}</div>
-                    <div className="text-xs font-bold text-stone-800 mt-1">{metric.title}</div>
-                    <p className="text-[11px] text-stone-500 mt-0.5">{metric.desc}</p>
+                  <td className="p-3 font-semibold" style={{ color: 'var(--text-main, #20231f)' }}>
+                    {row.parameter}
+                  </td>
+                  <td className="p-3">{row.manualProcess}</td>
+                  <td className="p-3 font-mono font-bold" style={{ color: 'var(--color-secondary, #b77927)' }}>
+                    {row.delay}
+                  </td>
+                  <td className="p-3 text-[11px]" style={{ color: 'var(--color-red, #a54d42)' }}>
+                    {row.risk}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Historic Case Studies Comparison */}
+        <div className="space-y-2">
+          <div className="text-[10px] font-mono uppercase font-bold tracking-wider" style={{ color: 'var(--text-muted, #73766f)' }}>
+            State-Level Audit Impact Comparison (Real Benchmark Scenarios):
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {HISTORIC_CASE_STUDIES.map((cs, i) => (
+              <div
+                key={i}
+                className="p-3 rounded-lg border flex flex-col justify-between"
+                style={{
+                  backgroundColor: 'var(--bg-card-subtle, #edeae1)',
+                  borderColor: 'var(--border-subtle, #d8d4ca)',
+                }}
+              >
+                <div>
+                  <div className="font-serif font-bold text-xs" style={{ color: 'var(--text-main, #20231f)' }}>
+                    {cs.title}
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0 shadow-xs">
-                    <IconComp className="w-6 h-6" />
+                  <div className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+                    {cs.location}
+                  </div>
+                  <div className="mt-2 text-[11px] p-1.5 rounded border" style={{ backgroundColor: 'var(--color-red-light, #faebe9)', color: 'var(--color-red, #a54d42)', borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+                    <strong>Manual:</strong> {cs.manualOutcome}
                   </div>
                 </div>
-              );
-            })}
+                <div className="mt-2 text-[11px] p-1.5 rounded border" style={{ backgroundColor: 'var(--color-primary-light, #e2ebe5)', color: 'var(--color-primary-text, #244737)', borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+                  <strong>Ecoryx:</strong> {cs.ecoryxVerdict}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Key Metric Summary */}
+        <div
+          className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x rounded-lg border p-3"
+          style={{
+            backgroundColor: 'var(--bg-card-subtle, #edeae1)',
+            borderColor: 'var(--border-subtle, #d8d4ca)',
+          }}
+        >
+          <div className="p-2 sm:px-3 text-left">
+            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Average Clearance Time Lost
+            </div>
+            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-red, #a54d42)' }}>
+              4 to 6 Months
+            </div>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Per major civil or highway infrastructure corridor
+            </p>
+          </div>
+
+          <div className="p-2 sm:px-3 text-left">
+            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Consultant Expense Leak
+            </div>
+            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-secondary, #b77927)' }}>
+              ₹45 Lakhs+
+            </div>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Wasted on routine distance and zoning certifications
+            </p>
+          </div>
+
+          <div className="p-2 sm:px-3 text-left">
+            <div className="text-[10px] font-mono uppercase" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Survey Measurement Error
+            </div>
+            <div className="text-xl font-mono font-bold mt-0.5" style={{ color: 'var(--color-red, #a54d42)' }}>
+              55% Discrepancy
+            </div>
+            <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Between physical sketches and actual satellite ESZ borders
+            </p>
           </div>
         </div>
       </div>

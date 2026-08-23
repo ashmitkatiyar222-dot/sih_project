@@ -1,136 +1,268 @@
-import React from 'react';
-import { Sun, Route, Waves, ShieldCheck, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sun, Route, Waves, ShieldCheck, Factory, CheckCircle2, FileText, Compass, HardHat, Building2 } from 'lucide-react';
+
+const SECTOR_DATA = [
+  {
+    id: 'energy',
+    name: 'Solar & Renewable Energy',
+    icon: Sun,
+    category: 'Category B2 / Special Priority',
+    constraints: 'Great Indian Bustard (GIB) flight corridors, scrub forest buffers, transmission right-of-way.',
+    statutoryActs: 'Rajasthan State Solar Policy · SC Order on GIB Conservation · MoEFCC 2019 Amendments',
+    gisCheck: 'R-Tree collision against avian migration paths & 2 km surface water drainage channels.',
+    bufferThreshold: '500m to 2 km Buffer',
+    clearanceBody: 'State Level Environment Impact Assessment Authority (SEIAA)',
+  },
+  {
+    id: 'transport',
+    name: 'Highways & Linear Corridors',
+    icon: Route,
+    category: 'Category A / National Highway Expansion',
+    constraints: 'Eco-Sensitive Zone (ESZ) dissection, elephant & tiger crossing animal underpasses.',
+    statutoryActs: 'Forest (Conservation) Act 1980 Sec 2 · NBWL Animal Underpass Clearance Guidelines',
+    gisCheck: 'Continuous polyline buffer intersection against 106 National Park boundaries.',
+    bufferThreshold: '10 km ESZ Radial Corridor',
+    clearanceBody: 'National Board for Wildlife (NBWL) & MoEFCC EAC',
+  },
+  {
+    id: 'hydro',
+    name: 'Hydropower & Dams',
+    icon: Waves,
+    category: 'Category A / River Valley Project',
+    constraints: 'Submergence forest area calculation, minimum environmental flow (e-flow) preservation.',
+    statutoryActs: 'Water (Prevention and Control of Pollution) Act 1974 · Dam Safety Act 2021',
+    gisCheck: 'DEM slope & elevation contour runoff calculations across catchment river basins.',
+    bufferThreshold: 'Catchment River Basin Sweep',
+    clearanceBody: 'Expert Appraisal Committee (River Valley & Hydro)',
+  },
+  {
+    id: 'industry',
+    name: 'Chemical & Industrial Parks',
+    icon: Factory,
+    category: 'Category A / Red Category Industry',
+    constraints: 'Zero Liquid Discharge (ZLD) effluent compliance, continuous ambient air monitoring (CAAQMS).',
+    statutoryActs: 'Air (Prevention and Control of Pollution) Act 1981 · CPCB Red Category Notification 2016',
+    gisCheck: 'Gaussian plume air dispersion radius modeling against nearest demographic settlement.',
+    bufferThreshold: '5 km Radial Demographics',
+    clearanceBody: 'Central Pollution Control Board (CPCB) & MoEFCC',
+  },
+];
+
+const SECTOR_SUMMARY_MATRIX = [
+  { sector: 'Solar / Wind Parks', eszBuffer: '500m - 2 km', fcaThreshold: 'Non-Forest Lands Exempt', statutoryBody: 'SEIAA B2 Standard' },
+  { sector: 'NHAI Highway Corridors', eszBuffer: '10 km ESZ Corridor', fcaThreshold: 'Strict Sec 2 Diversion', statutoryBody: 'MoEFCC EAC / NBWL' },
+  { sector: 'River Valley & Hydro Dams', eszBuffer: 'Catchment Perennial Flow', fcaThreshold: 'Submergence NPV Audit', statutoryBody: 'Central Water Commission' },
+  { sector: 'Red Category Chemicals', eszBuffer: '5 km Population Buffer', fcaThreshold: 'ZLD Plant Mandatory', statutoryBody: 'CPCB / State SPCB' },
+  { sector: 'Mining & Mineral Extraction', eszBuffer: '10 km Strict ESZ Ban', fcaThreshold: 'Mine Closure Plan EMP', statutoryBody: 'Indian Bureau of Mines' },
+  { sector: 'Coastal Ports & Harbours', eszBuffer: 'CRZ-I/II/III Intertidal', fcaThreshold: 'Mangrove Preservation', statutoryBody: 'National Coastal Zone Auth' },
+];
 
 export default function SectorsSection() {
+  const [activeSector, setActiveSector] = useState(SECTOR_DATA[0]);
+
   return (
-    <section id="sectors" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200 shadow-sm text-xs font-sans text-emerald-700 font-semibold mb-4">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            Project Sectors &amp; AI Intelligence
+    <section id="sectors" className="py-10 sm:py-14 border-t" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto">
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono mb-2 border"
+            style={{
+              backgroundColor: 'var(--bg-card, #fbfaf6)',
+              borderColor: 'var(--border-subtle, #d8d4ca)',
+              color: 'var(--text-main, #20231f)',
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
+            />
+            <span>SECTOR REGULATORY MATRIX</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans font-extrabold text-stone-900 tracking-tight">
-            Built for National Infrastructure &amp; Energy
+          <h2
+            className="text-2xl sm:text-3xl font-serif font-bold tracking-tight mb-1"
+            style={{ color: 'var(--text-main, #20231f)' }}
+          >
+            National Infrastructure &amp; Industrial Sector Rules
           </h2>
-          <p className="text-stone-600 text-sm sm:text-base mt-4">
-            Custom-tailored geospatial algorithms for every major civil, energy, and transport sector.
+          <p className="text-xs sm:text-sm" style={{ color: 'var(--text-muted, #73766f)' }}>
+            Custom spatial clearance algorithms designed specifically for major infrastructure pipelines.
           </p>
         </div>
 
-        {/* BENTO GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Bento Card 1 (2 Cols): Clean Energy */}
-          <div className="md:col-span-2 bg-white border border-stone-200 rounded-3xl p-8 flex flex-col justify-between group shadow-sm hover:shadow-md transition-shadow">
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
-                  <Sun className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                  Solar &amp; Wind Energy
-                </span>
-              </div>
-              <h3 className="font-sans font-extrabold text-2xl text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                Renewable Solar Farms &amp; Wind Power Parks
-              </h3>
-              <p className="text-sm text-stone-600 leading-relaxed max-w-xl font-normal">
-                Sub-second screening for bird migration flight corridors, grassland conservation zones, high-voltage transmission lines, and forest boundary buffers.
-              </p>
+        {/* Structured 2-Column Matrix Container */}
+        <div
+          className="rounded-xl border overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x"
+          style={{
+            backgroundColor: 'var(--bg-card, #fbfaf6)',
+            borderColor: 'var(--border-subtle, #d8d4ca)',
+          }}
+        >
+          {/* Left Column: Sector Selector Tabs (5 Cols) */}
+          <div className="lg:col-span-5 p-4 sm:p-5 space-y-2">
+            <div className="text-[10px] font-mono uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted, #73766f)' }}>
+              Select Infrastructure Sector:
             </div>
-            <div className="mt-8 pt-4 border-t border-stone-200 flex items-center justify-between flex-wrap gap-2 text-xs font-mono text-emerald-600">
-              <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5" />
-                <span>Flight Path Protection</span>
-              </span>
-              <span className="text-stone-500">Avg Scan Time: 0.32s</span>
-            </div>
+            {SECTOR_DATA.map((sec) => {
+              const isSelected = activeSector.id === sec.id;
+              const IconComp = sec.icon;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => setActiveSector(sec)}
+                  className="w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer"
+                  style={{
+                    backgroundColor: isSelected ? 'var(--bg-card-subtle, #edeae1)' : 'transparent',
+                    borderColor: isSelected ? 'var(--color-primary, #315c48)' : 'var(--border-subtle, #d8d4ca)',
+                    color: 'var(--text-main, #20231f)',
+                  }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="w-7 h-7 rounded flex items-center justify-center border"
+                      style={{
+                        backgroundColor: isSelected ? 'var(--color-primary, #315c48)' : 'var(--bg-card, #fbfaf6)',
+                        borderColor: isSelected ? 'var(--color-primary, #315c48)' : 'var(--border-subtle, #d8d4ca)',
+                        color: isSelected ? '#FFFFFF' : 'var(--text-main, #20231f)',
+                      }}
+                    >
+                      <IconComp className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold">{sec.name}</div>
+                      <div className="text-[10px] font-mono line-clamp-1" style={{ color: 'var(--text-muted, #73766f)' }}>
+                        {sec.category}
+                      </div>
+                    </div>
+                  </div>
+                  {isSelected && (
+                    <span className="text-[10px] font-mono font-bold" style={{ color: 'var(--color-primary, #315c48)' }}>
+                      Active ▸
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Bento Card 2 (1 Col): Highways */}
-          <div className="bg-white border border-stone-200 rounded-3xl p-8 flex flex-col justify-between group shadow-sm hover:shadow-md transition-shadow">
+          {/* Right Column: Detailed Regulatory Breakdown (7 Cols) */}
+          <div className="lg:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4" style={{ backgroundColor: 'var(--bg-card-subtle, #edeae1)' }}>
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 shadow-xs">
-                  <Route className="w-6 h-6" />
+              {/* Active Sector Title & Category */}
+              <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+                <div>
+                  <h3 className="font-serif font-bold text-lg" style={{ color: 'var(--text-main, #20231f)' }}>
+                    {activeSector.name}
+                  </h3>
+                  <span className="text-xs font-mono" style={{ color: 'var(--color-primary, #315c48)' }}>
+                    {activeSector.category}
+                  </span>
                 </div>
-                <span className="text-xs font-mono font-bold text-orange-700 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
-                  Transport
-                </span>
+                <div
+                  className="px-2 py-0.5 rounded text-[10px] font-mono border"
+                  style={{
+                    backgroundColor: 'var(--bg-card, #fbfaf6)',
+                    borderColor: 'var(--border-subtle, #d8d4ca)',
+                    color: 'var(--text-muted, #73766f)',
+                  }}
+                >
+                  Automated Audit Code
+                </div>
               </div>
-              <h3 className="font-sans font-extrabold text-xl text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                Highways &amp; Rail Corridors
-              </h3>
-              <p className="text-xs text-stone-600 leading-relaxed font-normal">
-                Long-route spatial corridor evaluation for eco-sensitive wildlife crossings, forest cutting limits, and rainwater culvert protection.
-              </p>
+
+              {/* Specification Grid */}
+              <div className="mt-4 space-y-3.5 text-xs">
+                <div>
+                  <div className="font-mono text-[10px] uppercase font-semibold mb-1" style={{ color: 'var(--text-muted, #73766f)' }}>
+                    1. Primary Spatial &amp; Habitat Constraints:
+                  </div>
+                  <p className="leading-relaxed font-normal" style={{ color: 'var(--text-main, #20231f)' }}>
+                    {activeSector.constraints}
+                  </p>
+                </div>
+
+                <div>
+                  <div className="font-mono text-[10px] uppercase font-semibold mb-1" style={{ color: 'var(--text-muted, #73766f)' }}>
+                    2. Statutory Gazette Notifications Checked:
+                  </div>
+                  <div
+                    className="p-2.5 rounded-lg border text-[11px] font-mono leading-relaxed"
+                    style={{
+                      backgroundColor: 'var(--bg-card, #fbfaf6)',
+                      borderColor: 'var(--border-subtle, #d8d4ca)',
+                      color: 'var(--text-main, #20231f)',
+                    }}
+                  >
+                    {activeSector.statutoryActs}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="font-mono text-[10px] uppercase font-semibold mb-1" style={{ color: 'var(--text-muted, #73766f)' }}>
+                    3. PostGIS Ingestion Query Algorithm:
+                  </div>
+                  <p className="leading-relaxed text-[11px]" style={{ color: 'var(--text-muted, #73766f)' }}>
+                    {activeSector.gisCheck}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="mt-8 pt-4 border-t border-stone-200 text-xs font-mono text-orange-600">
-              <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5" />
-                <span>Wildlife Crossing Safe</span>
-              </span>
+
+            {/* Bottom Status */}
+            <div
+              className="pt-3 border-t flex items-center justify-between text-[11px] font-mono"
+              style={{
+                borderColor: 'var(--border-subtle, #d8d4ca)',
+                color: 'var(--color-primary, #315c48)',
+              }}
+            >
+              <span>Deterministic Spatial Compliance</span>
+              <span>Latency: &lt; 0.38s</span>
             </div>
           </div>
+        </div>
 
-          {/* Bento Card 3 (1 Col): Water & River Basins */}
-          <div className="bg-white border border-stone-200 rounded-3xl p-8 flex flex-col justify-between group shadow-sm hover:shadow-md transition-shadow">
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-xs">
-                  <Waves className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-                  Hydrology
-                </span>
-              </div>
-              <h3 className="font-sans font-extrabold text-xl text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                River Basins &amp; Reservoirs
-              </h3>
-              <p className="text-xs text-stone-600 leading-relaxed font-normal">
-                Automated watershed drainage modeling, aquatic flora habitat protection, and downstream clean water assurance.
-              </p>
-            </div>
-            <div className="mt-8 pt-4 border-t border-stone-200 text-xs font-mono text-sky-600">
-              <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5" />
-                <span>Water Flow Protected</span>
-              </span>
-            </div>
+        {/* Sector Summary Matrix Table (Fills empty space) */}
+        <div
+          className="rounded-xl border p-4 sm:p-5"
+          style={{
+            backgroundColor: 'var(--bg-card, #fbfaf6)',
+            borderColor: 'var(--border-subtle, #d8d4ca)',
+          }}
+        >
+          <div className="flex items-center justify-between pb-3 mb-3 border-b" style={{ borderColor: 'var(--border-subtle, #d8d4ca)' }}>
+            <span className="text-xs font-serif font-bold" style={{ color: 'var(--text-main, #20231f)' }}>
+              Comprehensive Statutory Clearances by Infrastructure Domain
+            </span>
+            <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted, #73766f)' }}>
+              MoEFCC Gazette Gazette SOP 2026
+            </span>
           </div>
 
-          {/* Bento Card 4 (2 Cols): AI Statutory Engine */}
-          <div className="md:col-span-2 bg-white border border-stone-200 rounded-3xl p-8 flex flex-col justify-between group shadow-sm hover:shadow-md transition-shadow">
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
-                  <ShieldCheck className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                  Automated Statutory Intelligence
-                </span>
-              </div>
-              <h3 className="font-sans font-extrabold text-2xl text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                2,400+ EIA Gazette Laws &amp; Acts Digitized
-              </h3>
-              <p className="text-sm text-stone-600 leading-relaxed max-w-xl font-normal">
-                Built-in legal engine cross-examines the Wildlife Protection Act (1972), Forest Conservation Act (1980), and Water Prevention Act (1974) with sub-second accuracy.
-              </p>
-            </div>
-            <div className="mt-8 pt-4 border-t border-stone-200 flex items-center justify-between flex-wrap gap-2 text-xs font-mono text-emerald-600">
-              <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5" />
-                <span>100% Legal Grounding</span>
-              </span>
-              <span className="text-stone-500">Zero Hallucination Guarantee</span>
-            </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="font-mono text-[11px] border-b" style={{ borderColor: 'var(--border-subtle, #d8d4ca)', color: 'var(--text-muted, #73766f)' }}>
+                <tr>
+                  <th className="pb-2">Sector Domain</th>
+                  <th className="pb-2">Mandatory ESZ Distance</th>
+                  <th className="pb-2">Forest Act (FCA 1980) Rule</th>
+                  <th className="pb-2">Statutory Authority</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y text-[11px]" style={{ borderColor: 'var(--border-subtle, #d8d4ca)', color: 'var(--text-main, #20231f)' }}>
+                {SECTOR_SUMMARY_MATRIX.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-[#edeae1]/30">
+                    <td className="py-2.5 font-semibold">{row.sector}</td>
+                    <td className="py-2.5 font-mono" style={{ color: 'var(--color-secondary, #b77927)' }}>{row.eszBuffer}</td>
+                    <td className="py-2.5">{row.fcaThreshold}</td>
+                    <td className="py-2.5 font-mono" style={{ color: 'var(--color-primary, #315c48)' }}>{row.statutoryBody}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-
-
-

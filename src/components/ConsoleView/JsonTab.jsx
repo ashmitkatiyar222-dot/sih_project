@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 
 export default function JsonTab({ lat, lng, footprint, buffer, category, results }) {
@@ -34,11 +34,15 @@ export default function JsonTab({ lat, lng, footprint, buffer, category, results
 
   return (
     <div className="relative">
-      <div className="flex justify-between items-center mb-1 text-xs font-sans text-stone-500 dark:text-stone-500">
+      <div
+        className="flex justify-between items-center mb-1 text-xs font-sans"
+        style={{ color: 'var(--text-muted, #73766f)' }}
+      >
         <span>Raw Project Data & Safety Coordinates (JSON):</span>
         <button
           onClick={handleCopy}
-          className="text-emerald-700 dark:text-emerald-400 hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+          className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline"
+          style={{ color: 'var(--color-primary, #315c48)' }}
         >
           {copied ? (
             <>
@@ -53,13 +57,16 @@ export default function JsonTab({ lat, lng, footprint, buffer, category, results
           )}
         </button>
       </div>
-      <pre className="bg-[#0B0F19] dark:bg-[#060A10] text-emerald-300 dark:text-emerald-400 p-4 rounded-2xl text-[11px] font-mono overflow-x-auto max-h-56 leading-relaxed border border-stone-800 dark:border-slate-800 shadow-inner">
+      <pre
+        className="p-4 rounded-2xl text-[11px] font-mono overflow-x-auto max-h-56 leading-relaxed border shadow-inner"
+        style={{
+          backgroundColor: 'var(--dark-surface, #222a25)',
+          color: '#d1ead7',
+          borderColor: 'var(--border-subtle, #d8d4ca)',
+        }}
+      >
         <code>{jsonString}</code>
       </pre>
     </div>
   );
 }
-
-
-
-

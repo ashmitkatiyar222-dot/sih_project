@@ -1,4 +1,4 @@
-﻿import React, { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import RotarySwitch from './RotarySwitch';
 import BeforeEcoryxView from './BeforeEcoryxView';
 import ConsoleSection from './ConsoleView/ConsoleSection';
@@ -26,31 +26,43 @@ const WorkbenchSection = forwardRef(function WorkbenchSection(
   ref
 ) {
   return (
-    <section id="workbench-section" ref={ref} className="py-20 sm:py-28 relative overflow-hidden">
-      {/* Ambient Radial Mesh Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="workbench-section" ref={ref} className="py-10 sm:py-14 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200 shadow-sm text-xs font-sans text-emerald-300 font-semibold mb-4 shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Interactive Clearance Simulator
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono mb-3 border"
+            style={{
+              backgroundColor: 'var(--bg-card, #fbfaf6)',
+              borderColor: 'var(--border-subtle, #d8d4ca)',
+              color: 'var(--text-main, #20231f)',
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: 'var(--color-primary, #315c48)' }}
+            />
+            <span>COMPARATIVE CLEARANCE WORKBENCH</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans font-extrabold text-stone-900 tracking-tight mb-4">
-            See the Difference: Old Way vs. Ecoryx AI
+          <h2
+            className="text-2xl sm:text-3xl font-serif font-bold tracking-tight mb-2"
+            style={{ color: 'var(--text-main, #20231f)' }}
+          >
+            Manual Paper Delays vs. Instant AI Clearance
           </h2>
-          <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
-            Turn the rotary dial below to compare 6 months of manual paper reviews with instant 0.38-second GIS clearance.
+          <p className="text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--text-muted, #73766f)' }}>
+            Turn the dial to compare traditional 6-month paper review friction against sub-second automated compliance.
           </p>
         </div>
 
         {/* Rotary Switch */}
-        <RotarySwitch
-          switchState={switchState}
-          onToggle={onToggleSwitch}
-          onSelectState={onSelectState}
-        />
+        <div className="flex justify-center mb-6">
+          <RotarySwitch
+            switchState={switchState}
+            onToggle={onToggleSwitch}
+            onSelectState={onSelectState}
+          />
+        </div>
 
         {/* Views Container */}
         <div className="views-container">
@@ -85,6 +97,3 @@ const WorkbenchSection = forwardRef(function WorkbenchSection(
 });
 
 export default WorkbenchSection;
-
-
-

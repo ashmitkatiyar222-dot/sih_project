@@ -66,10 +66,10 @@ export default function App() {
       setTimeout(() => {
         setIsAuditing(false);
         confetti({
-          particleCount: 50,
-          spread: 60,
+          particleCount: 40,
+          spread: 50,
           origin: { y: 0.7 },
-          colors: ['#2563EB', '#10B981', '#38BDF8', '#0F172A'],
+          colors: ['#315c48', '#b77927', '#222a25', '#a54d42'],
         });
       }, 550);
     } catch {
